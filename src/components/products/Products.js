@@ -22,7 +22,12 @@ class Products extends Component{
                     
                     this.props.productsArray.map(product => {
                         if (product.category === this.props.category) { //filters out products by category
-                            return <Product key={product.description} product={product} selectedCurrency={this.props.selectedCurrency}/> //shows only filtered products
+                            return <Product 
+                                      key={product.description} 
+                                      product={product} 
+                                      selectedCurrency={this.props.selectedCurrency}
+                                      setProductPageItem={this.props.setProductPageItem}
+                                    /> 
                         } else {
                             return null
                         }

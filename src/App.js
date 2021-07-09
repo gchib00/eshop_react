@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import Products from './components/products/Products'
 import Header from './components/Header'
+import ProductPage from './components/ProductPage'
+import Cart from './components/Cart'
 
 import axios from 'axios'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 
 class App extends Component{
@@ -11,7 +14,9 @@ class App extends Component{
     this.state={
         dataArray: [],
         category: 'tech',
-        selectedCurrency: 0
+        selectedCurrency: 0,
+        productPageItem: {},
+        cartItems: []
     }
     this.fetchData = this.fetchData.bind(this);
   }
@@ -36,7 +41,9 @@ class App extends Component{
               id,
               value
             }
-            id
+            id,
+            name,
+            type,
           }
         }
       }
@@ -48,7 +55,6 @@ class App extends Component{
             this.setState({
                 dataArray: this.state.dataArray.concat(response.data.data.category.products)
             })
-            console.log(this.state.dataArray)
         })
   }
 
@@ -63,20 +69,50 @@ class App extends Component{
   handleCurrencyChange = (currencyIndex) => {
     this.setState({selectedCurrency: currencyIndex})
   }
+
+  setProductPageItem = (product) => {
+    this.setState({productPageItem: product})
+  }
+
+  addToCart = (product) => {
+    this.setState({cartItems: this.state.cartItems.concat(product)})
+  }
+
+
   render(){
     return(
-      <div className='App'>
-        <Header 
-          category={this.state.category} 
-          updateCategory={this.handleCategoryChange} 
-          changeCurrency={this.handleCurrencyChange}
-        />
-        <Products 
-          category={this.state.category} 
-          productsArray={this.state.dataArray} 
-          selectedCurrency={this.state.selectedCurrency}
-        />
-      </div>
+      <Router>
+          <>
+            <Header 
+              category={this.state.category} 
+              updateCategory={this.handleCategoryChange} 
+              changeCurrency={this.handleCurrencyChange}
+            />
+            <Switch>
+              <Route exact path='/'>
+                <Products 
+                  category={this.state.category} 
+                  productsArray={this.state.dataArray} 
+                  selectedCurrency={this.state.selectedCurrency}
+                  setProductPageItem={this.setProductPageItem}
+                />
+              </Route>
+              <Route exact path='/product'>
+                <ProductPage 
+                  product={this.state.productPageItem}
+                  selectedCurrency={this.state.selectedCurrency}
+                  addToCart={this.addToCart}
+                />
+              </Route>
+              <Route exact path='/cart'>
+                <Cart 
+                  items={this.state.cartItems} 
+                  selectedCurrency={this.state.selectedCurrency}
+                />
+              </Route>
+            </Switch>
+        </>
+      </Router>
     )
   }
 }

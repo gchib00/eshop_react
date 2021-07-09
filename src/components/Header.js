@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Logo from '../static/images/logo.svg'
 import Cart from '../static/images/cart.svg'
+import { Link } from 'react-router-dom'
 
 
 const HeaderElement = styled.header`
@@ -87,15 +88,19 @@ class Header extends Component{
                 <CategoryButton onClick={this.showTech}>TECH</CategoryButton>
                 <CategoryButton onClick={this.showClothes}>CLOTHES</CategoryButton>
             </CategoryContainer>
-            <img src={Logo} alt='logo' />
+            <div>
+              <Link to='/'><img src={Logo} alt='logo' /></Link>
+            </div>
             <ActionsMenuContainer>
                 <SelectCurrency onChange={this.handleCurrancyChange}>
-                    <option value='USD'>$</option>
-                    <option value='GBP'>£</option>
-                    <option value='JPY'>¥</option>
-                    <option value='RUB'>₽</option>
+                  <option value='USD'>$</option>
+                  <option value='GBP'>£</option>
+                  <option value='JPY'>¥</option>
+                  <option value='RUB'>₽</option>
                 </SelectCurrency>
-                <img src={Cart} alt='cart' />
+                <Link to='/cart'>
+                  <img src={Cart} alt='cart' />
+                </Link>
             </ActionsMenuContainer>
         </HeaderElement>  
     )
