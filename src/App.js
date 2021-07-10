@@ -16,7 +16,9 @@ class App extends Component{
         category: 'tech',
         selectedCurrency: 0,
         productPageItem: {},
-        cartItems: []
+        cartItems: [],
+        selectedOptions: []
+
     }
     this.fetchData = this.fetchData.bind(this);
   }
@@ -78,8 +80,33 @@ class App extends Component{
     this.setState({cartItems: this.state.cartItems.concat(product)})
   }
 
+  saveOption = (product, attribute, option) => { 
+    let selectedOptions = this.state.selectedOptions
+    let object = { //this data is being retrieved from ProductDetails and is being passed to Cart
+        product: product,
+        attribute: attribute,
+        option: option
+    }
+    //check if a mutually exclusive option had already been chosen for this item. If yes, delete previosuly selected item:
+    for (let i=0; i<selectedOptions.length; i++){
+      if (selectedOptions[i].product.name === product.name){
+        if (selectedOptions[i].attribute.id === attribute.id) {
+          //if old option is found, it will be removed from the array:
+          this.setState({
+            selectedOptions: this.state.selectedOptions.splice(i, 1)
+          })
+          //option will now be replaced by a new one:
+        }
+      }
+    }
+    this.setState({
+        selectedOptions: this.state.selectedOptions.concat(object)
+    })
+  }
+
 
   render(){
+    console.log("selectedOptions: ",this.state.selectedOptions)
     return(
       <Router>
           <>
@@ -102,6 +129,7 @@ class App extends Component{
                   product={this.state.productPageItem}
                   selectedCurrency={this.state.selectedCurrency}
                   addToCart={this.addToCart}
+                  saveOption={this.saveOption}
                 />
               </Route>
               <Route exact path='/cart'>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import ColorSelectorBox from './ColorSelectorBox'
+import OptionSelectorBox from './OptionSelectorBox'
+
 
 const MainContainer = styled.div`
     font-family: 'Raleway', sans-serif;
@@ -11,20 +13,6 @@ const OptionBoxes = styled.div`
     flex-direction: row;
     justify-content: space-evenly;
     margin: auto;
-`
-const OptionBox = styled.button`
-    box-sizing: border-box;
-    min-width: 63px;
-    min-height: 45px;
-    border: 1px solid #1D1F22;
-    align-items: center;
-    text-align: center; 
-    background-color: white;
-    &:hover {
-        background-color: black;
-        color: white;
-        transition: 300ms;
-    }
 `
 const AttributeTitle = styled.h2`
     display: flex;
@@ -49,7 +37,7 @@ const AddToCart = styled.button`
     margin-bottom: 1rem;
 `
 const Description = styled.div`
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
@@ -71,11 +59,24 @@ class ProductDetails extends Component {
         this.props.addToCart(this.props.product)
     }
 
+    selectOption = (product, option) => {
+        alert(`${option} is selected from ${product.name}`)
+        let attributeIndex;
+        let itemsIndex;
+        for (let i=0; i<product.attributes.length; i++){
+            for (let ii=0; ii<product.attributes[i].items.length; ii++){
+                    if (product.attributes[i].items[ii].value === option){
+                        attributeIndex = i; itemsIndex=ii;
+                    }
+            }
+        }
+        console.log('attributeIndex', attributeIndex)
+        console.log('itemsIndex', itemsIndex)
+    }
 
 
     render() {
         const product = this.props.product
-        // let attributes = this.props.product.attributes.length
         let currency = product.prices[this.props.selectedCurrency].currency
         let price = product.prices[this.props.selectedCurrency].amount
 
@@ -87,8 +88,8 @@ class ProductDetails extends Component {
         return(
             <MainContainer>
                 <h1>{product.name}</h1>
-                {product.attributes.length === 0 ? //if not checked, the program will break if product has no attribute
-                    <br /> //returning br tag or 'null' will fix the problem
+                {product.attributes.length === 0 ? //otherwise the program will break if product has no attribute
+                    <br /> //returning br tag or 'null' fixes the problem
                 :
                     product.attributes.map(attribute => {
                         return(
@@ -96,15 +97,11 @@ class ProductDetails extends Component {
                                 <AttributeTitle>{attribute.name}:</AttributeTitle>
                                 {attribute.type === 'swatch' ?
                                     <OptionBoxes>
-                                        {attribute.items.map(item => {
-                                            return <ColorSelectorBox color={item.value} />
-                                        })}
+                                        <ColorSelectorBox attribute={attribute} />
                                     </OptionBoxes>
                                 :
                                     <OptionBoxes>
-                                        {attribute.items.map(item => {
-                                            return <OptionBox onClick={()=>this.selectOption(item.value)}>{item.value}</OptionBox>
-                                        })}
+                                        <OptionSelectorBox attribute={attribute} product={product} saveOption={this.props.saveOption} />
                                     </OptionBoxes>
                                 }
                                 <br/>

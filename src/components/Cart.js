@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
-import ColorSelectorBox from './ColorSelectorBox'
+
+import PhotoSlider from './PhotoSlider'
 
 const ItemContainer = styled.div`
     font-family: 'Raleway', sans-serif;
@@ -8,9 +9,11 @@ const ItemContainer = styled.div`
     justify-content: space-between;
 
     max-width: 1100px;
-    height: 186px;
+    min-height: 186px;
     border: 1px solid black;
     margin-left: 2rem;
+
+    align-items: center;
 `
 const Title = styled.p`
     font-style: normal;
@@ -19,6 +22,7 @@ const Title = styled.p`
     line-height: 27px;
     align-items: center;
     color: #1D1F22;
+    margin-left: 1rem;
 `
 const Price = styled.p`
     font-style: normal;
@@ -27,6 +31,7 @@ const Price = styled.p`
     line-height: 18px;
     align-items: center;
     color: #1D1F22;
+    margin-left: 1rem;
 `
 const AttributeTitle = styled.h2`
     display: flex;
@@ -78,32 +83,30 @@ class Cart extends Component {
                                     <Price>{item.prices[index].currency} {item.prices[index].amount}</Price>
                                     <br />
                                     <div>
-                                    {item.attributes.length === 0 ? //needs to be checked, otherwise the program will break if product has no attribute
-                                        <br /> //returning br tag or 'null' will fix the problem
-                                    :
-                                        item.attributes.map(attribute => {
-                                            return(
-                                                <div>
-                                                    {attribute.type === 'swatch' ?
-                                                        // <OptionBoxes>
-                                                        //     {attribute.items.map(item => {
-                                                        //         return <ColorSelectorBox color={item.value} />
-                                                        //     })}
-                                                        // </OptionBoxes>
-                                                        null
-                                                    :
-                                                        <OptionBoxes>
-                                                            {attribute.items.map(item => {
-                                                                return <OptionBox>{item.value}</OptionBox>
-                                                            })}
-                                                        </OptionBoxes>
-                                                    }
-                                                    <br/>
-                                                </div>
-                                            )
-                                        })
-                                    }
+                                        {item.attributes.length === 0 ? //needs to be checked, otherwise the program will break if product has no attribute
+                                            <br /> //returning br tag or 'null' will fix the problem
+                                        :
+                                            item.attributes.map(attribute => {
+                                                return(
+                                                    <div>
+                                                        {attribute.type === 'swatch' ?
+                                                            null
+                                                        :
+                                                            <OptionBoxes>
+                                                                {attribute.items.map(item => {
+                                                                    return <OptionBox>{item.value}</OptionBox>
+                                                                })}
+                                                            </OptionBoxes>
+                                                        }
+                                                        <br/>
+                                                    </div>
+                                                )
+                                            })
+                                        }
                                     </div>
+                                </div>
+                                <div>
+                                    <PhotoSlider item={item} />
                                 </div>
                            </ItemContainer>
                         )

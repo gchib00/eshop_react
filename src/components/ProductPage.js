@@ -68,6 +68,7 @@ class ProductPage extends Component {
                     product={product} 
                     selectedCurrency={this.props.selectedCurrency} 
                     addToCart={this.props.addToCart}
+                    saveOption={this.props.saveOption}
                 />                    
             </MainContainer>
         )
