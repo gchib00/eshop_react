@@ -31,6 +31,7 @@ class App extends Component{
       category{
         products{
           id,
+          inStock,
           name,
           prices{
             amount,

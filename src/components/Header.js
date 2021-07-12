@@ -55,11 +55,24 @@ const SelectCurrency = styled.select`
     outline: 0px;
     margin-right: 18px;
 `
-const CartIcon = styled.img`
+const CartIcon = styled.div`
+  position: relative;
+  top: 2px;
   cursor: pointer;
   &:hover {
     opacity: 0.4;
   }
+`
+const ItemCounter = styled.span`
+  text-align: center;
+  position: absolute;
+  bottom: 14px;
+  left: 15px;
+  width: 20px;
+  height: 20px;
+  background: black;
+  border-radius: 50%;
+  color: white;
 `
 
 
@@ -118,7 +131,14 @@ class Header extends Component{
                   <option value='JPY'>¥</option>
                   <option value='RUB'>₽</option>
                 </SelectCurrency>
-                <CartIcon src={Cart} alt='cart' onClick={this.cartDisplay} />
+                <CartIcon onClick={this.cartDisplay}>
+                  <img src={Cart} alt='cart'/>
+                  {this.props.items.length > 0? 
+                    <ItemCounter>{this.props.items.length}</ItemCounter>  
+                  :
+                    null
+                  }
+                </CartIcon>
             </ActionsMenuContainer>
         </HeaderElement> 
         {this.state.showCart === true && this.props.items.length>0 ?

@@ -21,6 +21,25 @@ const Price = styled.p`
     font-size: 18px;
     line-height: 160%;
 `
+const OutOfStock = styled.img`
+    width: 100%;
+    height: 100%;
+`
+const OutOfStockText = styled.p`
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 205px;
+
+    text-decoration: none;
+    font-family: 'Raleway';
+    font-weight: 400;
+    font-size: 24px;
+    color: grey;
+
+`
+
 
 class Product extends Component{
 
@@ -40,22 +59,42 @@ class Product extends Component{
 
 
         return (
-            <ProductCard>
-                <Link to='/product' >
-                    <img 
-                      src={this.props.product.gallery[0]} 
-                      alt='product' 
-                      style={{width:'100%', height: '80%'}}
-                      onClick={this.showProductPage}
-                    />
-                </Link>
-                <p style={{opacity: 0.7}}>
-                    <strong>{this.props.product.name}</strong>
-                </p>
-                <Price>
-                    <strong>{currency} {amount}</strong>
-                </Price>
-            </ProductCard>
+            <>
+                {this.props.product.inStock === false ?
+                    <ProductCard style={{opacity: '0.5'}}>
+                        <div style={{width:'100%', height: '80%'}}>
+                            <OutOfStock 
+                                src={this.props.product.gallery[0]} 
+                                alt='out of stock product' 
+                            />
+                            <OutOfStockText>OUT OF STOCK</OutOfStockText>
+                        </div>
+                            <p style={{opacity: 0.7}}>
+                            <strong>{this.props.product.name}</strong>
+                        </p>
+                        <Price>
+                            <strong>{currency} {amount}</strong>
+                        </Price>
+                    </ProductCard>
+                    :
+                    <ProductCard>
+                        <Link to='/product' >
+                            <img 
+                                src={this.props.product.gallery[0]} 
+                                alt='product' 
+                                style={{width:'100%', height: '80%'}}
+                                onClick={this.showProductPage}
+                            />
+                        </Link>
+                            <p style={{opacity: 0.7}}>
+                            <strong>{this.props.product.name}</strong>
+                        </p>
+                        <Price>
+                            <strong>{currency} {amount}</strong>
+                        </Price>
+                    </ProductCard>
+                    }
+                </>
         )
     }
 }
