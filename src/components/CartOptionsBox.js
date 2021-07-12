@@ -1,9 +1,8 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
-import { v4 as uuidv4 } from 'uuid';
 
 
-const ColorOptionBox = styled.label`
+const OptionBox = styled.label`
     display: block;
     box-sizing: border-box;
     min-width: 63px;
@@ -11,38 +10,46 @@ const ColorOptionBox = styled.label`
     border: 1px solid #1D1F22;
     align-items: center;
     text-align: center; 
+    background-color: white;
+    cursor: pointer;
+    padding: 10px;
     &:hover {
-        opacity: 0.3;
+        background-color: black;
+        color: white;
         transition: 300ms;
     }
 `
 const Input = styled.input`
     display: none;
     &:checked + label {
-        opacity: 0.3;
+        background-color: black;
+        color: white;
     }
 `
 
-class ColorSelectorBox extends Component {
+
+class OptionSelectorBox extends Component {
     constructor(props){
         super(props)
         this.state={
             value: '',
+            selectedOptions: this.props.selectedOptions
         }
     }
+    
 
     onChange = (e) => {
         this.setState({value: e.target.value})
+        this.props.saveOption(this.props.product, this.props.attribute, e.target.value) //passes data back to App
     }
 
     render(){
         const attribute = this.props.attribute
-        console.log(`current (color) value is ${this.state.value}`)
 
         return(
             attribute.items.map(item => {
                 return(
-                    <div key={uuidv4()}>
+                    <div>
                         <Input
                             type='radio'
                             value={item.value} 
@@ -51,12 +58,12 @@ class ColorSelectorBox extends Component {
                             onChange={this.onChange}
                             id={item.value + attribute.name} //this is the easiest way to make sure that id is always unique
                         />
-                        <ColorOptionBox htmlFor={item.value + attribute.name} style={{backgroundColor: item.value}}/>
-                    </div> 
+                        <OptionBox htmlFor={item.value + attribute.name}>{item.value}</OptionBox>
+                    </div>
                 )
             }) 
         )
     }
 }
 
-export default ColorSelectorBox
+export default OptionSelectorBox

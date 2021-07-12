@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Logo from '../static/images/logo.svg'
 import Cart from '../static/images/cart.svg'
+import CartOverlay from './CartOverlay'
+import ModalOverlay from './ModalOverlay'
+
 import { Link } from 'react-router-dom'
 
 
@@ -52,10 +55,21 @@ const SelectCurrency = styled.select`
     outline: 0px;
     margin-right: 18px;
 `
-
+const CartIcon = styled.img`
+  cursor: pointer;
+  &:hover {
+    opacity: 0.4;
+  }
+`
 
 
 class Header extends Component{
+  constructor(props){
+    super(props)
+    this.state={
+      showCart: false
+    }
+  }
 
   showTech = () => {
     this.props.updateCategory('tech')
@@ -81,8 +95,14 @@ class Header extends Component{
       this.props.changeCurrency(4)
     }
   }
+
+  cartDisplay = () => {
+    this.setState({showCart: !this.state.showCart})
+  }
+
   render(){
     return(
+      <>
         <HeaderElement>
             <CategoryContainer>
                 <CategoryButton onClick={this.showTech}>TECH</CategoryButton>
@@ -98,11 +118,24 @@ class Header extends Component{
                   <option value='JPY'>¥</option>
                   <option value='RUB'>₽</option>
                 </SelectCurrency>
-                <Link to='/cart'>
-                  <img src={Cart} alt='cart' />
-                </Link>
+                <CartIcon src={Cart} alt='cart' onClick={this.cartDisplay} />
             </ActionsMenuContainer>
-        </HeaderElement>  
+        </HeaderElement> 
+        {this.state.showCart === true && this.props.items.length>0 ?
+          <div>
+            <CartOverlay 
+              items={this.props.items} 
+              selectedCurrency={this.props.selectedCurrency}
+              updateQuantity={this.props.updateQuantity}
+              saveOption={this.props.saveOption}
+              selectedOptions={this.props.selectedOptions}
+            />
+            <ModalOverlay cartDisplay={this.cartDisplay} />
+          </div>
+        :
+          null
+        } 
+      </> 
     )
   }
 }

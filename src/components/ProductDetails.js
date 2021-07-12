@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import ColorSelectorBox from './ColorSelectorBox'
 import OptionSelectorBox from './OptionSelectorBox'
+import { v4 as uuidv4 } from 'uuid';
+
 
 
 const MainContainer = styled.div`
@@ -35,6 +37,10 @@ const AddToCart = styled.button`
     border: none;
     margin: auto;
     margin-bottom: 1rem;
+    &:hover {
+        transition: 300ms;
+        opacity: 0.7;
+    }
 `
 const Description = styled.div`
     font-family: 'Roboto';
@@ -54,25 +60,29 @@ const Price = styled.p`
 
 class ProductDetails extends Component {
     
-    addProductToCart = () => {
-        alert('product has been added')
+    addProductToCart = (product, selectedOptions) => {
+        console.log('Saving the item:')
+        console.log(product)
+        console.log('with the following options:')
+        console.log(selectedOptions)
+        alert('Product has been added to cart')
         this.props.addToCart(this.props.product)
     }
 
-    selectOption = (product, option) => {
-        alert(`${option} is selected from ${product.name}`)
-        let attributeIndex;
-        let itemsIndex;
-        for (let i=0; i<product.attributes.length; i++){
-            for (let ii=0; ii<product.attributes[i].items.length; ii++){
-                    if (product.attributes[i].items[ii].value === option){
-                        attributeIndex = i; itemsIndex=ii;
-                    }
-            }
-        }
-        console.log('attributeIndex', attributeIndex)
-        console.log('itemsIndex', itemsIndex)
-    }
+    // selectOption = (product, option) => {
+    //     alert(`${option} is selected from ${product.name}`)
+    //     let attributeIndex;
+    //     let itemsIndex;
+    //     for (let i=0; i<product.attributes.length; i++){
+    //         for (let ii=0; ii<product.attributes[i].items.length; ii++){
+    //                 if (product.attributes[i].items[ii].value === option){
+    //                     attributeIndex = i; itemsIndex=ii;
+    //                 }
+    //         }
+    //     }
+    //     // console.log('attributeIndex', attributeIndex)
+    //     // console.log('itemsIndex', itemsIndex)
+    // }
 
 
     render() {
@@ -93,15 +103,21 @@ class ProductDetails extends Component {
                 :
                     product.attributes.map(attribute => {
                         return(
-                            <div>
+                            <div key={uuidv4()}>
                                 <AttributeTitle>{attribute.name}:</AttributeTitle>
                                 {attribute.type === 'swatch' ?
                                     <OptionBoxes>
-                                        <ColorSelectorBox attribute={attribute} />
+                                        <ColorSelectorBox attribute={attribute}/>
                                     </OptionBoxes>
                                 :
-                                    <OptionBoxes>
-                                        <OptionSelectorBox attribute={attribute} product={product} saveOption={this.props.saveOption} />
+                                    <OptionBoxes key={uuidv4()}>
+                                        <OptionSelectorBox 
+                                            key={uuidv4()}
+                                            attribute={attribute} 
+                                            product={product} 
+                                            saveOption={this.props.saveOption} 
+                                            selectedOptions={this.props.selectedOptions}    
+                                        />
                                     </OptionBoxes>
                                 }
                                 <br/>
@@ -113,7 +129,7 @@ class ProductDetails extends Component {
                     <AttributeTitle>Price:</AttributeTitle>
                     <Price>{currency} {price}</Price>
                 </div>
-                <AddToCart onClick={this.addProductToCart}>ADD TO CART</AddToCart>
+                <AddToCart onClick={()=>this.addProductToCart(product, this.props.selectedOptions)}>ADD TO CART</AddToCart>
                 <Description dangerouslySetInnerHTML={{__html: product.description}} />
             </MainContainer>
         )

@@ -8,7 +8,6 @@ import ChevronRight from '../static/images/right.svg'
 const SliderContainer = styled.div`
     width: 141px;
     height: 185px;
-    background: red;
 `
 const Image = styled.img`
     width: 100%;
@@ -18,12 +17,12 @@ const Image = styled.img`
 const Left = styled.img`
     position: relative;
     z-index: 9;
-    bottom: 50%;
+    bottom: 56%;
 `
 const Right = styled.img`
     position: relative;
     z-index: 9;
-    bottom: 50%;
+    bottom: 56%;
     left: 95px;
 `
 
@@ -42,17 +41,17 @@ class PhotoSlider extends Component {
         return this.setState({index: this.state.index-1})
     }
     moveRight = () => {
-        if (this.state.index > this.props.item.gallery.length) {
-            return alert('no more photos!')
+        if (this.state.index === this.props.item.gallery.length-1) {
+            return null
         }
         return this.setState({index: this.state.index+1})
     }
 
 
     render(){
+        
         let photos = this.props.item.gallery
-        console.log(this.props.item.gallery)
-        console.log(this.state.index)
+
         return(
             <SliderContainer>
                 <Image src={photos[this.state.index]} />

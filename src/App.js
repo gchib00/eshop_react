@@ -17,7 +17,8 @@ class App extends Component{
         selectedCurrency: 0,
         productPageItem: {},
         cartItems: [],
-        selectedOptions: []
+        selectedOptions: [],
+        total: 0
 
     }
     this.fetchData = this.fetchData.bind(this);
@@ -29,7 +30,8 @@ class App extends Component{
     query {
       category{
         products{
-          name
+          id,
+          name,
           prices{
             amount,
             currency
@@ -77,7 +79,18 @@ class App extends Component{
   }
 
   addToCart = (product) => {
+    let cartItems = this.state.cartItems
+    //check if product is already in the cart. If yes, just increase quantity instead of adding separate cartItem:
+    for (let i=0; i<cartItems.length; i++) {
+      if (cartItems[i].name === product.name) {
+        cartItems[i].quantity += 1
+        return this.setState({cartItems: cartItems})
+      }
+    }
+    //Since product isn't added to the cart yet, wrap it in a new object and add quantity to it, then pass it to Cart
+    product.quantity = 1
     this.setState({cartItems: this.state.cartItems.concat(product)})
+    
   }
 
   saveOption = (product, attribute, option) => { 
@@ -104,9 +117,24 @@ class App extends Component{
     })
   }
 
+  updateQuantity = (product, modifier) => {
+    let items = this.state.cartItems
+    for (let i=0; i<items.length; i++) {
+      if (items[i].name === product.name){
+        items[i].quantity = items[i].quantity + modifier //modifier is either -1 or +1
+        //if quantity is 0, remove the item from array
+        if (items[i].quantity === 0) { 
+          items.splice(i, 1)
+        }
+      }
+    }
+    //replace cartItems with updated array:
+    this.setState({cartItems: items})
+  }
 
   render(){
-    console.log("selectedOptions: ",this.state.selectedOptions)
+    // console.log("selectedOptions: ",this.state.selectedOptions)
+    console.log("cartItems: ",this.state.cartItems)
     return(
       <Router>
           <>
@@ -114,6 +142,12 @@ class App extends Component{
               category={this.state.category} 
               updateCategory={this.handleCategoryChange} 
               changeCurrency={this.handleCurrencyChange}
+
+              items={this.state.cartItems} 
+              selectedCurrency={this.state.selectedCurrency}
+              updateQuantity={this.updateQuantity}
+              saveOption={this.saveOption}
+              selectedOptions={this.state.selectedOptions}
             />
             <Switch>
               <Route exact path='/'>
@@ -125,17 +159,21 @@ class App extends Component{
                 />
               </Route>
               <Route exact path='/product'>
-                <ProductPage 
+                <ProductPage productPageItem
                   product={this.state.productPageItem}
                   selectedCurrency={this.state.selectedCurrency}
                   addToCart={this.addToCart}
                   saveOption={this.saveOption}
+                  selectedOptions={this.state.selectedOptions}
                 />
-              </Route>
+              </Route>product
               <Route exact path='/cart'>
                 <Cart 
                   items={this.state.cartItems} 
                   selectedCurrency={this.state.selectedCurrency}
+                  updateQuantity={this.updateQuantity}
+                  saveOption={this.saveOption}
+                  selectedOptions={this.state.selectedOptions}
                 />
               </Route>
             </Switch>

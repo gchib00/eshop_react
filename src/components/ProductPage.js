@@ -58,7 +58,12 @@ class ProductPage extends Component {
                     <SideImages>
                         {
                             images.map(img => {
-                                return <SideImage src={img} alt='side' onClick={() => this.updateImgIndex(img)}/>
+                                return  <SideImage 
+                                            src={img} 
+                                            alt='side'
+                                            key={img}
+                                            onClick={() => this.updateImgIndex(img)}
+                                        />
                             })
                         }
                     </SideImages>
@@ -69,6 +74,7 @@ class ProductPage extends Component {
                     selectedCurrency={this.props.selectedCurrency} 
                     addToCart={this.props.addToCart}
                     saveOption={this.props.saveOption}
+                    selectedOptions={this.props.selectedOptions}
                 />                    
             </MainContainer>
         )
