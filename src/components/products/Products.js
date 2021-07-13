@@ -8,15 +8,22 @@ const ProductsGrid = styled.div`
     grid-template-rows: 1fr;
     font-family: 'Raleway', sans-serif;
 `
+const Title = styled.h1`
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 37px;
+    margin-left: 4rem;
+`
 
 
 class Products extends Component{    
     render(){
         return(
             <>
-                <h3 style={{fontFamily: `'Raleway', sans-serif`, marginLeft: '40px'}}>
-                    Showing {this.props.category}
-                </h3>
+                <Title>
+                    Category - {this.props.category.charAt(0).toUpperCase()+ this.props.category.slice(1)}
+                </Title>
                 <ProductsGrid>
                     {
                     
@@ -27,6 +34,7 @@ class Products extends Component{
                                       product={product} 
                                       selectedCurrency={this.props.selectedCurrency}
                                       setProductPageItem={this.props.setProductPageItem}
+                                      addToCart={this.props.addToCart}
                                     /> 
                         } else {
                             return null

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import RoundCart from '../../static/images/roundCart.svg'
 import { Link } from 'react-router-dom'
 
 
@@ -8,18 +9,29 @@ const ProductCard = styled.div`
     margin-top: 3rem;
     margin-bottom: 3rem;
     width: 386px;
-    height: 444px;
-    /* border: 1px solid grey; */
+    height: 464px;
     &:hover {
         box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
-        transition: 400ms;
+        transition: 300ms;
     }
+    &:hover > img { 
+        visibility: visible; 
+    }
+`
+const ProductName = styled.p`
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    color: #1D1F22;
+    margin-left: 1rem;
+    line-height: 10px;
 `
 const Price = styled.p`
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
-    line-height: 160%;
+    margin-left: 1rem;
 `
 const OutOfStock = styled.img`
     width: 100%;
@@ -37,9 +49,26 @@ const OutOfStockText = styled.p`
     font-weight: 400;
     font-size: 24px;
     color: grey;
-
 `
-
+const MainImage = styled.img`
+    width: 94%; 
+    height: 78%; 
+    margin: 0.64rem;
+    margin-bottom: -3rem;
+`
+const Cart = styled.img`
+    position: relative;
+    display: flex;
+    left: 300px;
+    bottom: -15px;
+    visibility: hidden;
+    cursor: pointer;
+    margin: 0;
+    &:hover {
+        box-shadow: 0px 2px 3px 1px grey;
+        border-radius: 50%;
+    }
+`
 
 class Product extends Component{
 
@@ -69,29 +98,21 @@ class Product extends Component{
                             />
                             <OutOfStockText>OUT OF STOCK</OutOfStockText>
                         </div>
-                            <p style={{opacity: 0.7}}>
-                            <strong>{this.props.product.name}</strong>
-                        </p>
-                        <Price>
-                            <strong>{currency} {amount}</strong>
-                        </Price>
+                        <ProductName>{this.props.product.name}</ProductName>
+                        <Price>{currency}{amount}</Price>
                     </ProductCard>
                     :
                     <ProductCard>
                         <Link to='/product' >
-                            <img 
+                            <MainImage 
                                 src={this.props.product.gallery[0]} 
                                 alt='product' 
-                                style={{width:'100%', height: '80%'}}
                                 onClick={this.showProductPage}
                             />
                         </Link>
-                            <p style={{opacity: 0.7}}>
-                            <strong>{this.props.product.name}</strong>
-                        </p>
-                        <Price>
-                            <strong>{currency} {amount}</strong>
-                        </Price>
+                        <Cart src={RoundCart} onClick={()=>this.props.addToCart(this.props.product)} />
+                        <ProductName>{this.props.product.name}</ProductName>
+                        <Price>{currency}{amount}</Price>
                     </ProductCard>
                     }
                 </>

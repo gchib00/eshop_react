@@ -157,6 +157,7 @@ class App extends Component{
                   productsArray={this.state.dataArray} 
                   selectedCurrency={this.state.selectedCurrency}
                   setProductPageItem={this.setProductPageItem}
+                  addToCart={this.addToCart}
                 />
               </Route>
               <Route exact path='/product'>

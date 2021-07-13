@@ -8,12 +8,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 const MainContainer = styled.div`
     font-family: 'Raleway', sans-serif;
-    width: 292px;
+    width: 320px;
 `
 const OptionBoxes = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
     margin: auto;
 `
 const AttributeTitle = styled.h2`

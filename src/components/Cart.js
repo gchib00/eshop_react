@@ -15,9 +15,17 @@ const ItemContainer = styled.div`
     max-width: 1100px;
     min-height: 186px;
     border-top: 1px solid #E5E5E5;
-    margin-left: 2rem;
+    margin-left: 3rem;
+    margin-bottom: 1rem;
 
     align-items: center;
+`
+const CartTitle = styled.h1`
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px; 
+    margin-left: 3rem;
 `
 const Title = styled.p`
     font-style: normal;
@@ -26,7 +34,6 @@ const Title = styled.p`
     line-height: 27px;
     align-items: center;
     color: #1D1F22;
-    margin-left: 1rem;
 `
 const Price = styled.p`
     font-family: 'Raleway';
@@ -36,14 +43,13 @@ const Price = styled.p`
     line-height: 18px;
     align-items: center;
     color: #1D1F22;
-    margin-left: 1rem;
 `
 const OptionBoxes = styled.div`
+    min-width: 200px;
+    max-width: 400px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    /* margin: auto; */
-    min-width: 160px;
+    justify-content: flex-start;
 `
 const Side1 = styled.div`
     display: flex;
@@ -55,17 +61,33 @@ const Side2 = styled.div`
     flex-direction: row;
     justify-content: flex-start;
 `
+const TotalAmount = styled.div`
+    font-family: 'Raleway', sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    border-top: 1px solid #E5E5E5;
+    margin-left: 3rem;
+    margin-bottom: 1rem;
+`
 
 
 class Cart extends Component {
 
+    getTotal = () => {
+        let total = 0;
+        let items = this.props.items
+        items.map(item => {
+            return total = total + item.prices[this.props.selectedCurrency].amount * item.quantity
+        })
+        return total.toFixed(2)
+    }
+
     render(){
-        // console.log('cart items:')
-        // console.log(this.props.items)
-
-
         let items = this.props.items
         let index = this.props.selectedCurrency
+        let currencyIdentifier;
         
         if (items.length < 1) {
             return <h1>Cart is empty</h1>
@@ -73,7 +95,7 @@ class Cart extends Component {
 
         return(
             <>
-                <h1>CART</h1>
+                <CartTitle>CART</CartTitle>
                 <br />
                 
                 {items.map(item => {
@@ -84,8 +106,10 @@ class Cart extends Component {
                         if (currency === 'GBP') {currency = '£'}
                         if (currency === 'JPY') {currency = '¥'}
                         if (currency === 'RUB') {currency = '₽'}
+                        currencyIdentifier = currency
 
                     return(
+                        <>
                         <ItemContainer key={item.id}>
                             <Side1>
                                 <Title>{item.name}</Title> 
@@ -102,7 +126,7 @@ class Cart extends Component {
                                                         null
                                                     :
                                                         <OptionBoxes>
-                                                            <OptionSelectorBox 
+                                                            <OptionSelectorBox         
                                                                 attribute={attribute} 
                                                                 saveOption={this.props.saveOption} 
                                                                 product={item}
@@ -122,7 +146,11 @@ class Cart extends Component {
                                 <PhotoSlider item={item} />
                             </Side2>
                         </ItemContainer>
-
+                        <TotalAmount>
+                            <h2>TOTAL</h2>
+                            <h2>{currencyIdentifier}{this.getTotal()}</h2>
+                        </TotalAmount>
+                        </>
                     ) 
                 })}
             </>

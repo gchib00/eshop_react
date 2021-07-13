@@ -23,16 +23,31 @@ const CategoryContainer = styled.div`
   height: 56;
   width: 234px;
   margin-left: 3rem;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
 `
-const CategoryButton = styled.button`
-  height: 56px;
-  width: 97px;
-  font-family: 'Raleway', bold;
-  font-weight: bold;
+const Radio = styled.input`
+    display: none;
+    &:checked + label {
+        color: #5ECE7B;
+        border-bottom: 2px solid #5ECE7B;
+    }
+`
+const CategoryButton = styled.label`
+  display: block;
+  box-sizing: border-box;
+  min-height: 35px;
+  min-width: 97px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
   color: black;
   border: none;
+  text-align: center;
   &:hover{
       border-bottom: 2px solid #5ECE7B;
+      color: #5ECE7B;
   }
   background: transparent;
 `
@@ -91,6 +106,7 @@ class Header extends Component{
     this.props.updateCategory('clothes')
   }
 
+
   handleCurrancyChange = (e) => {
     if (e.target.value === 'USD'){
       this.props.changeCurrency(0)
@@ -118,8 +134,30 @@ class Header extends Component{
       <>
         <HeaderElement>
             <CategoryContainer>
-                <CategoryButton onClick={this.showTech}>TECH</CategoryButton>
-                <CategoryButton onClick={this.showClothes}>CLOTHES</CategoryButton>
+              <div>
+                  <Radio
+                      type='radio'
+                      // value={item.value} 
+                      // name={attribute.name}
+                      checked={this.props.category === 'tech'}
+                      onClick={this.showTech}
+                      id='techRadioBtn'
+                  />
+                  <CategoryButton htmlFor='techRadioBtn'>TECH</CategoryButton>
+              </div>
+              <div>
+                  <Radio
+                      type='radio'
+                      // value={item.value} 
+                      // name={attribute.name}
+                      checked={this.props.category === 'clothes'}
+                      onClick={this.showClothes}
+                      id='clothesRadioBtn'
+                  />
+                  <CategoryButton htmlFor='clothesRadioBtn'>CLOTHES</CategoryButton>
+              </div>
+                {/* <CategoryButton onClick={this.showTech}>TECH</CategoryButton>
+                <CategoryButton onClick={this.showClothes}>CLOTHES</CategoryButton> */}
             </CategoryContainer>
             <div>
               <Link to='/'><img src={Logo} alt='logo' /></Link>

@@ -7,14 +7,15 @@ import { v4 as uuidv4 } from 'uuid';
 const OptionBox = styled.label`
     display: block;
     box-sizing: border-box;
-    min-width: 63px;
-    min-height: 45px;
+    min-width: 68px;
     border: 1px solid #1D1F22;
     align-items: center;
     text-align: center; 
     background-color: white;
     cursor: pointer;
-    padding: 10px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    margin-right: 1rem;
     &:hover {
         background-color: black;
         color: white;
@@ -72,25 +73,11 @@ class OptionSelectorBox extends Component {
                 return true
             }
         }
-        // for (let i=0; i<selectedOptions.length; i++){
-        //     if (selectedOptions[i].product.name === this.props.product.name) {
-        //         if (selectedOptions[i].attribute.name === attribute){
-        //             if (selectedOptions[i].option === item){
-        //                 return true
-        //             }
-        //         }
-        //     }
-        // }
-
     }
 
 
     render(){
         const attribute = this.props.attribute
-        // console.log('this.state.value:')
-        // console.log(this.state.value)
-        // console.log('this.props.product = ')
-        // console.log(this.props.product)
         return(
             attribute.items.map(item => {
                 return(
