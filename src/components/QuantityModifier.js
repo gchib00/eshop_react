@@ -40,7 +40,6 @@ class QuantityModifier extends Component {
 
     add = () => {
         this.props.updateQuantity(this.props.item, +1)
-        console.log('item sent to cart is:', this.props.item)
     }
     subtract = () => {
         if (this.props.item.quantity > 0) {

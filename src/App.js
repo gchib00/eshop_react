@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Products from './components/products/Products'
+import Products from './components/Products'
 import Header from './components/Header'
 import ProductPage from './components/ProductPage'
 import Cart from './components/Cart'
@@ -134,8 +134,6 @@ class App extends Component{
   }
 
   render(){
-    // console.log("selectedOptions: ",this.state.selectedOptions)
-    console.log("cartItems: ",this.state.cartItems)
     return(
       <Router>
           <>

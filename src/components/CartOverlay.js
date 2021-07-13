@@ -75,6 +75,7 @@ const Price = styled.p`
     color: #1D1F22;
     margin-left: 1rem;
     margin-right: 1rem;
+    line-height: 3px;
 `
 const Attribute = styled.p`
     font-style: normal;
@@ -151,6 +152,18 @@ const CheckoutButton = styled(Link)`
         opacity: 0.7;
     }
 `
+const ColorContainer = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: -4px;
+`
+const ColorCube = styled.div`
+    max-width: 8px;
+    padding: 8px;
+    border: 1px black solid;
+    margin-left: 5px;
+`
 
 class CartOverlay extends Component {
 
@@ -185,9 +198,6 @@ class CartOverlay extends Component {
             return <h1>Cart is empty</h1>
         }
 
-        console.log(items)
-
-
         return(
             <CartContainer>
                 <MyBag>My Bag.<ItemsSpan> {totalItems}</ItemsSpan></MyBag>
@@ -198,7 +208,7 @@ class CartOverlay extends Component {
                         if (currency === 'USD') {currency = '$'}
                         if (currency === 'GBP') {currency = '£'}
                         if (currency === 'JPY') {currency = '¥'}
-                        if (currency === 'RUB') {currency = '₽'}
+                        if (currency === 'RUB') {currency = '₽'} 
                         currencyIdentifier = currency
                     return(
                         <ItemContainer key={item.id}>
@@ -210,11 +220,20 @@ class CartOverlay extends Component {
                                     null //returning br tag or 'null' will fix the problem
                                     :
                                         item.attributes.map(attribute => {
-                                            return(
-                                                <div key={uuidv4()}>
+                                            if (attribute.type === 'swatch') {
+                                                return(
+                                                    <ColorContainer key={uuidv4()}>
+                                                        <Attribute>{attribute.id}: </Attribute>
+                                                        <ColorCube style={{backgroundColor: this.getItemOptions(attribute, item)}} />
+                                                    </ColorContainer>
+                                                )
+                                            } else {
+                                                return(
+                                                    <div key={uuidv4()}>
                                                         <Attribute>{attribute.id}: {this.getItemOptions(attribute, item)}</Attribute>
-                                                </div>
-                                            )
+                                                    </div>
+                                                )
+                                            }
                                         })
                                     }
                                 </div>

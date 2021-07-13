@@ -90,7 +90,7 @@ class Cart extends Component {
         let currencyIdentifier;
         
         if (items.length < 1) {
-            return <h1>Cart is empty</h1>
+            return <CartTitle>Cart is empty</CartTitle>
         }
 
         return(
@@ -109,7 +109,6 @@ class Cart extends Component {
                         currencyIdentifier = currency
 
                     return(
-                        <>
                         <ItemContainer key={item.id}>
                             <Side1>
                                 <Title>{item.name}</Title> 
@@ -122,18 +121,14 @@ class Cart extends Component {
                                         item.attributes.map(attribute => {
                                             return(
                                                 <div key={uuidv4()}>
-                                                    {attribute.type === 'swatch' ?
-                                                        null
-                                                    :
-                                                        <OptionBoxes>
-                                                            <OptionSelectorBox         
-                                                                attribute={attribute} 
-                                                                saveOption={this.props.saveOption} 
-                                                                product={item}
-                                                                selectedOptions={this.props.selectedOptions}
-                                                            />
-                                                        </OptionBoxes>
-                                                    }
+                                                    <OptionBoxes>
+                                                        <OptionSelectorBox         
+                                                            attribute={attribute} 
+                                                            saveOption={this.props.saveOption} 
+                                                            product={item}
+                                                            selectedOptions={this.props.selectedOptions}
+                                                        />
+                                                    </OptionBoxes>
                                                     <br/>
                                                 </div>
                                             )
@@ -146,13 +141,12 @@ class Cart extends Component {
                                 <PhotoSlider item={item} />
                             </Side2>
                         </ItemContainer>
+                    ) 
+                })}
                         <TotalAmount>
                             <h2>TOTAL</h2>
                             <h2>{currencyIdentifier}{this.getTotal()}</h2>
                         </TotalAmount>
-                        </>
-                    ) 
-                })}
             </>
         )
     }

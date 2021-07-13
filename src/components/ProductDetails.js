@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import ColorSelectorBox from './ColorSelectorBox'
 import OptionSelectorBox from './OptionSelectorBox'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -8,11 +7,21 @@ import { v4 as uuidv4 } from 'uuid';
 
 const MainContainer = styled.div`
     font-family: 'Raleway', sans-serif;
-    width: 320px;
+    width: 340px;
+`
+const ProductName = styled.h1`
+    display: flex;
+    justify-content: flex-start;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 30px;
+    margin-bottom: 3rem;
 `
 const OptionBoxes = styled.div`
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
     margin: auto;
 `
@@ -27,7 +36,7 @@ const AttributeTitle = styled.h2`
 `
 const AddToCart = styled.button`
     padding: 16px 32px;
-    width: 292px;
+    width: 338px;
     height: 52px;
     background: #5ECE7B;
     color: white;
@@ -61,29 +70,8 @@ const Price = styled.p`
 class ProductDetails extends Component {
     
     addProductToCart = (product, selectedOptions) => {
-        console.log('Saving the item:')
-        console.log(product)
-        console.log('with the following options:')
-        console.log(selectedOptions)
-        alert('Product has been added to cart')
         this.props.addToCart(this.props.product)
     }
-
-    // selectOption = (product, option) => {
-    //     alert(`${option} is selected from ${product.name}`)
-    //     let attributeIndex;
-    //     let itemsIndex;
-    //     for (let i=0; i<product.attributes.length; i++){
-    //         for (let ii=0; ii<product.attributes[i].items.length; ii++){
-    //                 if (product.attributes[i].items[ii].value === option){
-    //                     attributeIndex = i; itemsIndex=ii;
-    //                 }
-    //         }
-    //     }
-    //     // console.log('attributeIndex', attributeIndex)
-    //     // console.log('itemsIndex', itemsIndex)
-    // }
-
 
     render() {
         const product = this.props.product
@@ -97,7 +85,7 @@ class ProductDetails extends Component {
 
         return(
             <MainContainer>
-                <h1>{product.name}</h1>
+                <ProductName>{product.name}</ProductName>
                 {product.attributes.length === 0 ? //otherwise the program will break if product has no attribute
                     <br /> //returning br tag or 'null' fixes the problem
                 :
@@ -105,11 +93,6 @@ class ProductDetails extends Component {
                         return(
                             <div key={uuidv4()}>
                                 <AttributeTitle>{attribute.name}:</AttributeTitle>
-                                {attribute.type === 'swatch' ?
-                                    <OptionBoxes>
-                                        <ColorSelectorBox attribute={attribute}/>
-                                    </OptionBoxes>
-                                :
                                     <OptionBoxes key={uuidv4()}>
                                         <OptionSelectorBox 
                                             key={uuidv4()}
@@ -119,7 +102,7 @@ class ProductDetails extends Component {
                                             selectedOptions={this.props.selectedOptions}    
                                         />
                                     </OptionBoxes>
-                                }
+
                                 <br/>
                             </div>
                         )

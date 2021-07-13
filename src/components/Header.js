@@ -137,27 +137,23 @@ class Header extends Component{
               <div>
                   <Radio
                       type='radio'
-                      // value={item.value} 
-                      // name={attribute.name}
                       checked={this.props.category === 'tech'}
                       onClick={this.showTech}
                       id='techRadioBtn'
+                      readOnly
                   />
                   <CategoryButton htmlFor='techRadioBtn'>TECH</CategoryButton>
               </div>
               <div>
                   <Radio
                       type='radio'
-                      // value={item.value} 
-                      // name={attribute.name}
                       checked={this.props.category === 'clothes'}
                       onClick={this.showClothes}
                       id='clothesRadioBtn'
+                      readOnly
                   />
                   <CategoryButton htmlFor='clothesRadioBtn'>CLOTHES</CategoryButton>
               </div>
-                {/* <CategoryButton onClick={this.showTech}>TECH</CategoryButton>
-                <CategoryButton onClick={this.showClothes}>CLOTHES</CategoryButton> */}
             </CategoryContainer>
             <div>
               <Link to='/'><img src={Logo} alt='logo' /></Link>

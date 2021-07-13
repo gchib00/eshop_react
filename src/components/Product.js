@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import RoundCart from '../../static/images/roundCart.svg'
+import RoundCart from '../static/images/roundCart.svg'
 import { Link } from 'react-router-dom'
 
 
@@ -36,6 +36,7 @@ const Price = styled.p`
 const OutOfStock = styled.img`
     width: 100%;
     height: 100%;
+    cursor: not-allowed;
 `
 const OutOfStockText = styled.p`
     position: relative;
@@ -49,6 +50,7 @@ const OutOfStockText = styled.p`
     font-weight: 400;
     font-size: 24px;
     color: grey;
+    cursor: not-allowed;
 `
 const MainImage = styled.img`
     width: 94%; 

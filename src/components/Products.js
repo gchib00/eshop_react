@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Product from '../product/Product'
+import Product from './Product'
 import styled from 'styled-components'
 
 const ProductsGrid = styled.div`
