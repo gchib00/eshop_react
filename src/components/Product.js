@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import RoundCart from '../static/images/roundCart.svg'
 import { Link } from 'react-router-dom'
@@ -33,30 +33,24 @@ const Price = styled.p`
     font-size: 18px;
     margin-left: 1rem;
 `
-const OutOfStock = styled.img`
-    width: 100%;
-    height: 100%;
-    cursor: not-allowed;
-`
 const OutOfStockText = styled.p`
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    bottom: 205px;
+    bottom: 105px;
 
     text-decoration: none;
     font-family: 'Raleway';
     font-weight: 400;
     font-size: 24px;
     color: grey;
-    cursor: not-allowed;
 `
 const MainImage = styled.img`
     width: 94%; 
     height: 78%; 
     margin: 0.64rem;
-    margin-bottom: -3rem;
+    margin-bottom: -6rem;
 `
 const Cart = styled.img`
     position: relative;
@@ -72,52 +66,107 @@ const Cart = styled.img`
     }
 `
 
-class Product extends Component{
+class Product extends PureComponent{
 
     showProductPage = () => {
         return this.props.setProductPageItem(this.props.product)
+    }
+    outofstockStyle = (inStock) => {
+        if (!inStock){
+            return({
+                opacity: '0.5',
+                marginBottom: '-8rem',
+            })
+        }
+        return null
+    }
+    outofstockText = (inStock) => {
+        if(!inStock){
+            return 'OUT OF STOCK'
+        }
+        return null
+    }
+    outofstockCart = (inStock) => {
+        if(!inStock){
+            return{
+                visibility: 'hidden',
+            }
+        }
     }
 
     render() {
         const currencyIndex = this.props.selectedCurrency
         let currency = this.props.product.prices[currencyIndex].currency
-        let amount = this.props.product.prices[currencyIndex].amount
+        const amount = this.props.product.prices[currencyIndex].amount
+        const availability = this.props.product.inStock
 
         if (currency === 'USD') {currency = '$'}
         if (currency === 'GBP') {currency = '£'}
-        if (currency === 'JPY') {currency = '¥'}
+        if (currency === 'JPY') {currency = '¥'} 
         if (currency === 'RUB') {currency = '₽'}
 
-
         return (
-            <>
-                {this.props.product.inStock === false ?
-                    <ProductCard style={{opacity: '0.5'}}>
-                        <div style={{width:'100%', height: '80%'}}>
-                            <OutOfStock 
-                                src={this.props.product.gallery[0]} 
-                                alt='out of stock product' 
-                            />
-                            <OutOfStockText>OUT OF STOCK</OutOfStockText>
-                        </div>
-                        <ProductName>{this.props.product.name}</ProductName>
-                        <Price>{currency}{amount}</Price>
-                    </ProductCard>
-                    :
-                    <ProductCard>
-                        <Link to='/product' >
-                            <MainImage 
-                                src={this.props.product.gallery[0]} 
-                                alt='product' 
-                                onClick={this.showProductPage}
-                            />
-                        </Link>
-                        <Cart src={RoundCart} onClick={()=>this.props.addToCart(this.props.product)} />
-                        <ProductName>{this.props.product.name}</ProductName>
-                        <Price>{currency}{amount}</Price>
-                    </ProductCard>
-                    }
-                </>
+            <ProductCard>
+                <Link to='/product' style={{textDecoration: 'none'}}>
+                    <MainImage 
+                        src={this.props.product.gallery[0]} 
+                        alt='product' 
+                        onClick={this.showProductPage}
+                        style={this.outofstockStyle(availability)}
+                    />
+                    <OutOfStockText>{this.outofstockText(availability)}</OutOfStockText>
+                </Link>
+                <Cart 
+                    src={RoundCart} 
+                    onClick={()=>this.props.addToCart(this.props.product)} 
+                    style={(this.outofstockCart(availability))}
+                />
+                <ProductName>{this.props.product.name}</ProductName>
+                <Price>{currency}{amount}</Price>
+            </ProductCard>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // <>
+            //     {this.props.product.inStock === false ?
+            //         <ProductCard style={{opacity: '0.5'}}>
+            //             <div style={{width:'100%', height: '80%'}}>
+            //                 <OutOfStock 
+            //                     src={this.props.product.gallery[0]} 
+            //                     alt='out of stock product' 
+            //                 />
+            //                 <OutOfStockText>OUT OF STOCK</OutOfStockText>
+            //             </div>
+            //             <ProductName>{this.props.product.name}</ProductName>
+            //             <Price>{currency}{amount}</Price>
+            //         </ProductCard>
+            //     :
+            //         <ProductCard>
+            //             <Link to='/product' >
+            //                 <MainImage 
+            //                     src={this.props.product.gallery[0]} 
+            //                     alt='product' 
+            //                     onClick={this.showProductPage}
+            //                 />
+            //             </Link>
+            //             <Cart src={RoundCart} onClick={()=>this.props.addToCart(this.props.product)} />
+            //             <ProductName>{this.props.product.name}</ProductName>
+            //             <Price>{currency}{amount}</Price>
+            //         </ProductCard>
+            //     }
+            // </>
         )
     }
 }

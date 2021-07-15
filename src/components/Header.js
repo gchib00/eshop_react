@@ -105,7 +105,9 @@ class Header extends Component{
   showClothes = () => {
     this.props.updateCategory('clothes')
   }
-
+  showAll = () => {
+    this.props.updateCategory('') //if query receives empty title string, it will fetch items of all category
+  }
 
   handleCurrancyChange = (e) => {
     if (e.target.value === 'USD'){
@@ -134,6 +136,16 @@ class Header extends Component{
       <>
         <HeaderElement>
             <CategoryContainer>
+              <div>
+                  <Radio
+                      type='radio'
+                      checked={this.props.category === ''}
+                      onClick={this.showAll}
+                      id='allRadioBtn'
+                      readOnly
+                  />
+                  <CategoryButton htmlFor='allRadioBtn'>ALL</CategoryButton>
+              </div>
               <div>
                   <Radio
                       type='radio'

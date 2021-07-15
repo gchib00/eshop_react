@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import OptionSelectorBox from './OptionSelectorBox'
 import { v4 as uuidv4 } from 'uuid';
-
-
+import sanitizeHtml from 'sanitize-html';
 
 const MainContainer = styled.div`
     font-family: 'Raleway', sans-serif;
@@ -22,7 +21,7 @@ const OptionBoxes = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     margin: auto;
 `
 const AttributeTitle = styled.h2`
@@ -70,9 +69,24 @@ const Price = styled.p`
 class ProductDetails extends Component {
     
     addProductToCart = (product, selectedOptions) => {
-        this.props.addToCart(this.props.product)
+        if (!product.inStock){
+            return null
+        }
+        return this.props.addToCart(this.props.product)
     }
-
+    disableButton = (available) => {
+        if(!available){
+            return({display: 'none'})
+        }
+        return null
+    }
+    purifyHtml = (html) => {
+        const purifiedHtml = sanitizeHtml(html, {
+            allowedTags: ['p', 'ul', 'li', 'div', 'span', 'strong', 'h2','h3','h4'],
+            allowedAttributes: {}
+        })
+        return purifiedHtml
+    }
     render() {
         const product = this.props.product
         let currency = product.prices[this.props.selectedCurrency].currency
@@ -112,12 +126,14 @@ class ProductDetails extends Component {
                     <AttributeTitle>Price:</AttributeTitle>
                     <Price>{currency} {price}</Price>
                 </div>
-                <AddToCart onClick={()=>this.addProductToCart(product, this.props.selectedOptions)}>ADD TO CART</AddToCart>
-                <Description dangerouslySetInnerHTML={{__html: product.description}} />
+                <AddToCart 
+                    onClick={()=>this.addProductToCart(product, this.props.selectedOptions)}
+                    style={this.disableButton(product.inStock)}>ADD TO CART
+                </AddToCart>
+                <Description dangerouslySetInnerHTML={{__html: this.purifyHtml(product.description)}} />
             </MainContainer>
         )
     }
-
 }
 
 export default ProductDetails

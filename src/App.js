@@ -3,17 +3,21 @@ import Products from './components/Products'
 import Header from './components/Header'
 import ProductPage from './components/ProductPage'
 import Cart from './components/Cart'
-
-import axios from 'axios'
+import ApolloClient from 'apollo-boost'
+import {ApolloProvider} from 'react-apollo'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
+
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/'
+})
 
 class App extends Component{
   constructor(){
     super()
     this.state={
         dataArray: [],
-        category: 'tech',
+        category: '',
         selectedCurrency: 0,
         productPageItem: {},
         cartItems: [],
@@ -21,50 +25,6 @@ class App extends Component{
         total: 0
 
     }
-    this.fetchData = this.fetchData.bind(this);
-  }
-
-  fetchData = async () => {
-    const url = 'http://localhost:4000/'
-    const productNames_QUERY = `
-    query {
-      category{
-        products{
-          id,
-          inStock,
-          name,
-          prices{
-            amount,
-            currency
-          }
-          gallery,
-          description,
-          category,
-          attributes{
-            items{
-              displayValue,
-              id,
-              value
-            }
-            id,
-            name,
-            type,
-          }
-        }
-      }
-    }
-    `
-    await axios
-        .post(url, {query: productNames_QUERY})
-        .then(response => {
-            this.setState({
-                dataArray: this.state.dataArray.concat(response.data.data.category.products)
-            })
-        })
-  }
-
-  componentDidMount(){
-      this.fetchData()
   }
 
   handleCategoryChange = (category) => {
@@ -135,50 +95,52 @@ class App extends Component{
 
   render(){
     return(
-      <Router>
-          <>
-            <Header 
-              category={this.state.category} 
-              updateCategory={this.handleCategoryChange} 
-              changeCurrency={this.handleCurrencyChange}
+      <ApolloProvider client={client}>
+        <Router>
+            <>
+              <Header 
+                category={this.state.category} 
+                updateCategory={this.handleCategoryChange} 
+                changeCurrency={this.handleCurrencyChange}
 
-              items={this.state.cartItems} 
-              selectedCurrency={this.state.selectedCurrency}
-              updateQuantity={this.updateQuantity}
-              saveOption={this.saveOption}
-              selectedOptions={this.state.selectedOptions}
-            />
-            <Switch>
-              <Route exact path='/'>
-                <Products 
-                  category={this.state.category} 
-                  productsArray={this.state.dataArray} 
-                  selectedCurrency={this.state.selectedCurrency}
-                  setProductPageItem={this.setProductPageItem}
-                  addToCart={this.addToCart}
-                />
-              </Route>
-              <Route exact path='/product'>
-                <ProductPage productPageItem
-                  product={this.state.productPageItem}
-                  selectedCurrency={this.state.selectedCurrency}
-                  addToCart={this.addToCart}
-                  saveOption={this.saveOption}
-                  selectedOptions={this.state.selectedOptions}
-                />
-              </Route>product
-              <Route exact path='/cart'>
-                <Cart 
-                  items={this.state.cartItems} 
-                  selectedCurrency={this.state.selectedCurrency}
-                  updateQuantity={this.updateQuantity}
-                  saveOption={this.saveOption}
-                  selectedOptions={this.state.selectedOptions}
-                />
-              </Route>
-            </Switch>
-        </>
-      </Router>
+                items={this.state.cartItems} 
+                selectedCurrency={this.state.selectedCurrency}
+                updateQuantity={this.updateQuantity}
+                saveOption={this.saveOption}
+                selectedOptions={this.state.selectedOptions}
+              />
+              <Switch>
+                <Route exact path='/'>
+                  <Products 
+                    category={this.state.category} 
+                    productsArray={this.state.dataArray} 
+                    selectedCurrency={this.state.selectedCurrency}
+                    setProductPageItem={this.setProductPageItem}
+                    addToCart={this.addToCart}
+                  />
+                </Route>
+                <Route exact path='/product'>
+                  <ProductPage productPageItem
+                    product={this.state.productPageItem}
+                    selectedCurrency={this.state.selectedCurrency}
+                    addToCart={this.addToCart}
+                    saveOption={this.saveOption}
+                    selectedOptions={this.state.selectedOptions}
+                  />
+                </Route>product
+                <Route exact path='/cart'>
+                  <Cart 
+                    items={this.state.cartItems} 
+                    selectedCurrency={this.state.selectedCurrency}
+                    updateQuantity={this.updateQuantity}
+                    saveOption={this.saveOption}
+                    selectedOptions={this.state.selectedOptions}
+                  />
+                </Route>
+              </Switch>
+          </>
+        </Router>
+      </ApolloProvider>
     )
   }
 }
