@@ -166,7 +166,6 @@ const ColorCube = styled.div`
 `
 
 class CartOverlay extends Component {
-
     getItemOptions = (attribute, cartItem) => {
         const selectedOptions = this.props.selectedOptions
         for (let i=0; i<selectedOptions.length; i++){
@@ -184,70 +183,88 @@ class CartOverlay extends Component {
         })
         return total.toFixed(2)
     }
+    checkIfEmpty = () => {
+        if (this.props.items.length < 1) {
+            return <h1>Cart is empty</h1>
+        }
+    }
+    mybagText = () => {
+        const items = this.props.items
+        let totalItems = `${items.length} items`
+        if (items.length === 1) {
+            totalItems=`${items.length} item`
+        }
+        return(<MyBag>My Bag.<ItemsSpan> {totalItems}</ItemsSpan></MyBag>)
+    }
+    getCurrencySymbol = (currency) => {
+        let symbol = currency
+        // //in case currency is index:
+        // if (typeof symbol !== String){
+        //     console.log('currency para:', currency)
+        //     // symbol = this.props.items[0].prices[currency].currency
+        // }
+        if (symbol === 'USD') {symbol = '$'}
+        if (symbol === 'GBP') {symbol = '£'}
+        if (symbol === 'JPY') {symbol = '¥'}
+        if (symbol === 'RUB') {symbol = '₽'} 
+        return symbol
+    }
+    showItems = () => {
+        const array = []
+        const items = this.props.items
+        const index = this.props.selectedCurrency
+        items.map(item => {
+            const currency = item.prices[index].currency
+            let price = item.prices[index].amount
+            return array.push(
+                <ItemContainer key={item.id}>
+                    <Side1>
+                        <Title>{item.name}</Title> 
+                        <Price>{this.getCurrencySymbol(currency)}{price}</Price>
+                        <div>
+                            {item.attributes.length === 0 ? null :
+                                item.attributes.map(attribute => 
+                                    {if (attribute.type === 'swatch') {
+                                        return(
+                                            <ColorContainer key={uuidv4()}>
+                                                <Attribute>{attribute.id}: </Attribute>
+                                                <ColorCube style={{backgroundColor: this.getItemOptions(attribute, item)}} />
+                                            </ColorContainer>
+                                        )
+                                    } else {
+                                        return(
+                                            <div key={uuidv4()}>
+                                                <Attribute>{attribute.id}: {this.getItemOptions(attribute, item)}</Attribute>
+                                            </div>
+                                        )
+                                    }}
+                                )
+                            }
+                        </div>
+                    </Side1>
+                    <Side2>
+                        <QuantityModifierSmall item={item} updateQuantity={this.props.updateQuantity}/>
+                        <Image src={item.gallery[0]} />
+                    </Side2>
+                </ItemContainer>
+            ) 
+        })
+        return array
+    }
 
 
     render(){
-        let items = this.props.items
-        let index = this.props.selectedCurrency
-        let currencyIdentifier;
-        let totalItems = `${items.length} items`
 
-        if (items.length === 1) {totalItems=`${items.length} item`}
-
-        if (items.length < 1) {
-            return <h1>Cart is empty</h1>
-        }
-
+        this.checkIfEmpty()
         return(
             <CartContainer>
-                <MyBag>My Bag.<ItemsSpan> {totalItems}</ItemsSpan></MyBag>
-
-                {items.map(item => {
-                    let currency = item.prices[index].currency
-                    let price = item.prices[index].amount
-                        if (currency === 'USD') {currency = '$'}
-                        if (currency === 'GBP') {currency = '£'}
-                        if (currency === 'JPY') {currency = '¥'}
-                        if (currency === 'RUB') {currency = '₽'} 
-                        currencyIdentifier = currency
-                    return(
-                        <ItemContainer key={item.id}>
-                            <Side1>
-                                <Title>{item.name}</Title> 
-                                <Price>{currency}{price}</Price>
-                                <div>
-                                    {item.attributes.length === 0 ? //needs to be checked, otherwise the program will break if product has no attribute
-                                    null //returning br tag or 'null' will fix the problem
-                                    :
-                                        item.attributes.map(attribute => {
-                                            if (attribute.type === 'swatch') {
-                                                return(
-                                                    <ColorContainer key={uuidv4()}>
-                                                        <Attribute>{attribute.id}: </Attribute>
-                                                        <ColorCube style={{backgroundColor: this.getItemOptions(attribute, item)}} />
-                                                    </ColorContainer>
-                                                )
-                                            } else {
-                                                return(
-                                                    <div key={uuidv4()}>
-                                                        <Attribute>{attribute.id}: {this.getItemOptions(attribute, item)}</Attribute>
-                                                    </div>
-                                                )
-                                            }
-                                        })
-                                    }
-                                </div>
-                            </Side1>
-                            <Side2>
-                                <QuantityModifierSmall item={item} updateQuantity={this.props.updateQuantity}/>
-                                <Image src={item.gallery[0]} />
-                            </Side2>
-                        </ItemContainer>
-                    ) 
-                    })}
+                {this.mybagText()}
+                {this.showItems()}
                     <TotalSection>
                         <Title>Total</Title>
-                        <Price>{currencyIdentifier}{this.getTotal()}</Price>
+                        <Price>
+                            {this.getCurrencySymbol(this.props.items[0].prices[this.props.selectedCurrency].currency)} {this.getTotal()}
+                        </Price>
                     </TotalSection>
                     <ButtonContainer>
                         <ViewbagButton to='/cart'>VIEW BAG</ViewbagButton>

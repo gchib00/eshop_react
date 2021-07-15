@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import RoundCart from '../static/images/roundCart.svg'
 import { Link } from 'react-router-dom'
 
-
 const ProductCard = styled.div`
     margin: auto;
     margin-top: 3rem;
@@ -93,19 +92,23 @@ class Product extends PureComponent{
             }
         }
     }
-
-    render() {
+    getCurrency = () => {
         const currencyIndex = this.props.selectedCurrency
         let currency = this.props.product.prices[currencyIndex].currency
-        const amount = this.props.product.prices[currencyIndex].amount
-        const availability = this.props.product.inStock
-
         if (currency === 'USD') {currency = '$'}
         if (currency === 'GBP') {currency = '£'}
         if (currency === 'JPY') {currency = '¥'} 
         if (currency === 'RUB') {currency = '₽'}
-
-        return (
+        return currency
+    }
+    getAmount = () => {
+        const currencyIndex = this.props.selectedCurrency
+        const amount = this.props.product.prices[currencyIndex].amount
+        return amount
+    }
+    render() {
+        const availability = this.props.product.inStock
+        return(
             <ProductCard>
                 <Link to='/product' style={{textDecoration: 'none'}}>
                     <MainImage 
@@ -122,53 +125,9 @@ class Product extends PureComponent{
                     style={(this.outofstockCart(availability))}
                 />
                 <ProductName>{this.props.product.name}</ProductName>
-                <Price>{currency}{amount}</Price>
+                <Price>{this.getCurrency()}{this.getAmount()}</Price>
             </ProductCard>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // <>
-            //     {this.props.product.inStock === false ?
-            //         <ProductCard style={{opacity: '0.5'}}>
-            //             <div style={{width:'100%', height: '80%'}}>
-            //                 <OutOfStock 
-            //                     src={this.props.product.gallery[0]} 
-            //                     alt='out of stock product' 
-            //                 />
-            //                 <OutOfStockText>OUT OF STOCK</OutOfStockText>
-            //             </div>
-            //             <ProductName>{this.props.product.name}</ProductName>
-            //             <Price>{currency}{amount}</Price>
-            //         </ProductCard>
-            //     :
-            //         <ProductCard>
-            //             <Link to='/product' >
-            //                 <MainImage 
-            //                     src={this.props.product.gallery[0]} 
-            //                     alt='product' 
-            //                     onClick={this.showProductPage}
-            //                 />
-            //             </Link>
-            //             <Cart src={RoundCart} onClick={()=>this.props.addToCart(this.props.product)} />
-            //             <ProductName>{this.props.product.name}</ProductName>
-            //             <Price>{currency}{amount}</Price>
-            //         </ProductCard>
-            //     }
-            // </>
         )
     }
 }
-
 export default Product

@@ -1,8 +1,6 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid';
-
-
 
 const OptionBox = styled.label`
     display: block;
@@ -54,21 +52,18 @@ const Input = styled.input`
     }
 `
 
-class OptionSelectorBox extends Component {
+class OptionSelectorBox extends PureComponent {
     constructor(props){
         super(props)
         this.state={
             selectedOptions: this.props.selectedOptions,
         }
     }
-
     onChange = (option) => {
         this.props.saveOption(this.props.product, this.props.attribute, option) //passes data back to App
     }
-
     populateOptions = (attribute, item) => {
         const selectedOptions = this.props.selectedOptions
-
         for (let i=0; i<selectedOptions.length; i++){
             if (selectedOptions[i].product.name === this.props.product.name 
              && selectedOptions[i].attribute.name === attribute 
@@ -77,82 +72,44 @@ class OptionSelectorBox extends Component {
             }
         }
     }
-
-
-    render(){
-
-        const attribute = this.props.attribute        
+    optionsToRender = (attribute) => {
+        const array = []
         if (attribute.type === 'swatch') {
-            return(
-                attribute.items.map(item => {
-                    return(
-                        <div key={uuidv4()}>
-                            <Input
-                                type='radio'
-                                value={item.value} 
-                                name={attribute.name}
-                                defaultChecked={this.populateOptions(attribute.name, item.value)}
-                                onClick={()=>this.onChange(item.value)}
-                                id={item.value + attribute.name} //this is the easiest way to make sure that id is always unique
-                            />
-                            <ColorBox id='colorbox'
-                                htmlFor={item.value + attribute.name} 
-                                style={{backgroundColor: item.value}}
-                            />
-                        </div>
-                    )
-                }) 
-            )
-        } else {
-            return(
-                attribute.items.map(item => {
-                    return(
-                        <div key={uuidv4()}>
-                            <Input
-                                type='radio'
-                                value={item.value} 
-                                name={attribute.name}
-                                defaultChecked={this.populateOptions(attribute.name, item.value)}
-                                onClick={()=>this.onChange(item.value)}
-                                id={item.value + attribute.name}
-                            />
-                            <OptionBox htmlFor={item.value + attribute.name}>{item.value}</OptionBox>
-                        </div>
-                    )
-                }) 
-            )
+            attribute.items.map(item => array.push(
+                <div key={uuidv4()}>
+                    <Input
+                        type='radio'
+                        value={item.value} 
+                        name={attribute.name}
+                        defaultChecked={this.populateOptions(attribute.name, item.value)}
+                        onClick={()=>this.onChange(item.value)}
+                        id={item.value + attribute.name}
+                    />
+                    <ColorBox id='colorbox'
+                        htmlFor={item.value + attribute.name} 
+                        style={{backgroundColor: item.value}}
+                    />
+                </div>))
+        } else { 
+            attribute.items.map(item => array.push(
+                <div key={uuidv4()}>
+                    <Input
+                        type='radio'
+                        value={item.value} 
+                        name={attribute.name}
+                        defaultChecked={this.populateOptions(attribute.name, item.value)}
+                        onClick={()=>this.onChange(item.value)}
+                        id={item.value + attribute.name}
+                    />
+                    <OptionBox htmlFor={item.value + attribute.name}>{item.value}</OptionBox>
+                </div>))
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // return(
-        //     attribute.items.map(item => {
-        //         return(
-        //             <div key={uuidv4()}>
-        //                 <Input
-        //                     type='radio'
-        //                     value={item.value} 
-        //                     name={attribute.name}
-        //                     defaultChecked={this.populateOptions(attribute.name, item.value)}
-        //                     onClick={()=>this.onChange(item.value)}
-        //                     id={item.value + attribute.name} //this is the easiest way to make sure that id is always unique
-        //                 />
-        //                 <OptionBox htmlFor={item.value + attribute.name}>{item.value}</OptionBox>
-        //             </div>
-        //         )
-        //     }) 
-        // )
+        return array
+    }
+    render(){
+        return(
+            this.optionsToRender(this.props.attribute)
+        )
     }
 }
-
 export default OptionSelectorBox

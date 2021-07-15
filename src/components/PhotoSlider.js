@@ -1,10 +1,8 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import styled from 'styled-components'
 import ChevronLeft from '../static/images/left.svg'
 import ChevronRight from '../static/images/right.svg'
 
-
-//Styles
 const SliderContainer = styled.div`
     width: 141px;
     height: 185px;
@@ -26,8 +24,7 @@ const Right = styled.img`
     left: 95px;
 `
 
-
-class PhotoSlider extends Component {
+class PhotoSlider extends PureComponent {
     constructor(props){
         super(props)
         this.state = {
@@ -46,12 +43,8 @@ class PhotoSlider extends Component {
         }
         return this.setState({index: this.state.index+1})
     }
-
-
     render(){
-        
         let photos = this.props.item.gallery
-
         return(
             <SliderContainer>
                 <Image src={photos[this.state.index]} />
@@ -61,5 +54,4 @@ class PhotoSlider extends Component {
         )
     }
 }
-
 export default PhotoSlider

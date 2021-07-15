@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import OptionSelectorBox from './OptionSelectorBox'
 import { v4 as uuidv4 } from 'uuid';
@@ -66,7 +66,7 @@ const Price = styled.p`
     color: #1D1F22;
 `
 
-class ProductDetails extends Component {
+class ProductDetails extends PureComponent {
     
     addProductToCart = (product, selectedOptions) => {
         if (!product.inStock){
@@ -87,41 +87,41 @@ class ProductDetails extends Component {
         })
         return purifiedHtml
     }
+    renderAttributes = () => {
+        const array = []
+        const product = this.props.product
+        product.attributes.map(attribute => array.push(
+                <div key={uuidv4()}>
+                    <AttributeTitle>{attribute.name}:</AttributeTitle>
+                        <OptionBoxes key={uuidv4()}>
+                            <OptionSelectorBox 
+                                key={uuidv4()}
+                                attribute={attribute} 
+                                product={product} 
+                                saveOption={this.props.saveOption} 
+                                selectedOptions={this.props.selectedOptions}    
+                            />
+                        </OptionBoxes>
+                    <br/>
+                </div>
+            )
+        )
+        return array
+    }
     render() {
         const product = this.props.product
         let currency = product.prices[this.props.selectedCurrency].currency
         let price = product.prices[this.props.selectedCurrency].amount
-
         if (currency === 'USD') {currency = '$'}
         if (currency === 'GBP') {currency = '£'}
+        if (currency === 'AUD') {currency = '$'}
         if (currency === 'JPY') {currency = '¥'}
         if (currency === 'RUB') {currency = '₽'}
 
         return(
             <MainContainer>
                 <ProductName>{product.name}</ProductName>
-                {product.attributes.length === 0 ? //otherwise the program will break if product has no attribute
-                    <br /> //returning br tag or 'null' fixes the problem
-                :
-                    product.attributes.map(attribute => {
-                        return(
-                            <div key={uuidv4()}>
-                                <AttributeTitle>{attribute.name}:</AttributeTitle>
-                                    <OptionBoxes key={uuidv4()}>
-                                        <OptionSelectorBox 
-                                            key={uuidv4()}
-                                            attribute={attribute} 
-                                            product={product} 
-                                            saveOption={this.props.saveOption} 
-                                            selectedOptions={this.props.selectedOptions}    
-                                        />
-                                    </OptionBoxes>
-
-                                <br/>
-                            </div>
-                        )
-                    })
-                }
+                {this.renderAttributes()}
                 <div>
                     <AttributeTitle>Price:</AttributeTitle>
                     <Price>{currency} {price}</Price>
@@ -135,5 +135,4 @@ class ProductDetails extends Component {
         )
     }
 }
-
 export default ProductDetails

@@ -59,23 +59,24 @@ class Products extends PureComponent{
     }
     return `Category - ${this.props.category.charAt(0).toUpperCase()+ this.props.category.slice(1)}`
   }
+  renderProducts = () => {
+    const array = []
+    this.filteredList().map(product => array.push(
+      <Product 
+        key={product.id} 
+        product={product} 
+        selectedCurrency={this.props.selectedCurrency}
+        setProductPageItem={this.props.setProductPageItem}
+        addToCart={this.props.addToCart}
+      />
+    ))
+    return array
+  }
   render(){
     return(
       <>
         <Title>{this.displayTitle()}</Title>
-        <ProductsGrid>
-          {this.filteredList().map(product => {
-            return(
-              <Product 
-                key={product.id} 
-                product={product} 
-                selectedCurrency={this.props.selectedCurrency}
-                setProductPageItem={this.props.setProductPageItem}
-                addToCart={this.props.addToCart}
-              />
-            )} 
-          )}
-        </ProductsGrid>
+        <ProductsGrid>{this.renderProducts()}</ProductsGrid>
       </>
     )
   }

@@ -1,7 +1,6 @@
-import React,{ Component } from 'react'
+import React,{ PureComponent } from 'react'
 import styled from 'styled-components'
 import ProductDetails from './ProductDetails.js'
-
 
 const MainContainer = styled.main`
     width: 80%;
@@ -27,26 +26,33 @@ const MainImage = styled.img`
     width: 610px;
 `
 
-
-class ProductPage extends Component {
+class ProductPage extends PureComponent {
     constructor(props){
         super(props)
         this.state = {
             imgIndex: 0,
         }
     }
-
-    populateImgArray = async (array) =>{
-        array = await this.props.product.gallery.map(img => array.push(img))
+    populateImgArray = (array) =>{
+        array = this.props.product.gallery.map(img => array.push(img))
     }
-
     updateImgIndex = (imgURL) => {
         // when side image is clicked, it will update 'imgIndex', which will cause the main image to change accordingly 
         this.setState({
             imgIndex: this.props.product.gallery.findIndex(img => img === imgURL)
         })
     }
-
+    renderSideImages = (images) => {
+        const array = []
+        images.map(img => array.push(
+            <SideImage 
+                src={img} 
+                alt='side'
+                key={img}
+                onClick={() => this.updateImgIndex(img)}
+            />))
+        return array
+    }
     render(){
         const product = this.props.product
         let images = []
@@ -54,20 +60,7 @@ class ProductPage extends Component {
 
         return(
             <MainContainer>
-                <div>
-                    <SideImages>
-                        {
-                            images.map(img => {
-                                return  <SideImage 
-                                            src={img} 
-                                            alt='side'
-                                            key={img}
-                                            onClick={() => this.updateImgIndex(img)}
-                                        />
-                            })
-                        }
-                    </SideImages>
-                </div>
+                <SideImages>{this.renderSideImages(images)}</SideImages>
                 <MainImage alt='main' src={product.gallery[this.state.imgIndex]} />
                 <ProductDetails 
                     product={product} 
@@ -80,5 +73,4 @@ class ProductPage extends Component {
         )
     }
 }
-
 export default ProductPage

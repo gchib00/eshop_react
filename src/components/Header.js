@@ -4,9 +4,8 @@ import Logo from '../static/images/logo.svg'
 import Cart from '../static/images/cart.svg'
 import CartOverlay from './CartOverlay'
 import ModalOverlay from './ModalOverlay'
-
+import CurrencySelector from './CurrencySelector'
 import { Link } from 'react-router-dom'
-
 
 const HeaderElement = styled.header`
   height: 80px;
@@ -62,14 +61,6 @@ const ActionsMenuContainer = styled.div`
   padding: 40px;
   margin-right: 3rem;
 `
-const SelectCurrency = styled.select`
-    color: #43464E;
-    border: none;
-    font-size: 1.4rem;
-    background: transparent;
-    outline: 0px;
-    margin-right: 18px;
-`
 const CartIcon = styled.div`
   position: relative;
   top: 2px;
@@ -90,7 +81,6 @@ const ItemCounter = styled.span`
   color: white;
 `
 
-
 class Header extends Component{
   constructor(props){
     super(props)
@@ -98,7 +88,6 @@ class Header extends Component{
       showCart: false
     }
   }
-
   showTech = () => {
     this.props.updateCategory('tech')
   }
@@ -108,45 +97,51 @@ class Header extends Component{
   showAll = () => {
     this.props.updateCategory('') //if query receives empty title string, it will fetch items of all category
   }
-
-  handleCurrancyChange = (e) => {
-    if (e.target.value === 'USD'){
-      this.props.changeCurrency(0)
-    } 
-    if (e.target.value === 'GBP'){
-      this.props.changeCurrency(1)
-    }
-    if (e.target.value === 'AUD'){
-      this.props.changeCurrency(2)
-    }
-    if (e.target.value === 'JPY'){
-      this.props.changeCurrency(3)
-    }
-    if (e.target.value === 'RUB'){
-      this.props.changeCurrency(4)
-    }
-  }
-
   cartDisplay = () => {
     this.setState({showCart: !this.state.showCart})
   }
-
+  cartItemAmount = (totalItems) => {
+    if(totalItems > 0){
+      return(<ItemCounter>{this.props.items.length}</ItemCounter>)  
+    }
+    return null
+  }
+  showCartOverlay = () => {
+    if (this.state.showCart === true && this.props.items.length>0) {
+      return(
+        <div>
+          <CartOverlay 
+            items={this.props.items} 
+            selectedCurrency={this.props.selectedCurrency}
+            updateQuantity={this.props.updateQuantity}
+            saveOption={this.props.saveOption}
+            selectedOptions={this.props.selectedOptions}
+          />
+          <ModalOverlay cartDisplay={this.cartDisplay} />
+        </div>
+      )
+    }
+    return null
+  }
   render(){
     return(
       <>
         <HeaderElement>
             <CategoryContainer>
               <div>
+                <Link to='/'>
                   <Radio
-                      type='radio'
-                      checked={this.props.category === ''}
-                      onClick={this.showAll}
-                      id='allRadioBtn'
-                      readOnly
-                  />
-                  <CategoryButton htmlFor='allRadioBtn'>ALL</CategoryButton>
+                    type='radio'
+                    checked={this.props.category === ''}
+                    onClick={this.showAll}
+                    id='allRadioBtn'
+                    readOnly
+                />
+                </Link>
+                <CategoryButton htmlFor='allRadioBtn'>ALL</CategoryButton>
               </div>
               <div>
+                <Link to='/'>
                   <Radio
                       type='radio'
                       checked={this.props.category === 'tech'}
@@ -154,9 +149,11 @@ class Header extends Component{
                       id='techRadioBtn'
                       readOnly
                   />
-                  <CategoryButton htmlFor='techRadioBtn'>TECH</CategoryButton>
+                </Link>
+                <CategoryButton htmlFor='techRadioBtn'>TECH</CategoryButton>
               </div>
               <div>
+                <Link to='/'>
                   <Radio
                       type='radio'
                       checked={this.props.category === 'clothes'}
@@ -164,46 +161,23 @@ class Header extends Component{
                       id='clothesRadioBtn'
                       readOnly
                   />
-                  <CategoryButton htmlFor='clothesRadioBtn'>CLOTHES</CategoryButton>
+                </Link>
+                <CategoryButton htmlFor='clothesRadioBtn'>CLOTHES</CategoryButton>
+                  
               </div>
             </CategoryContainer>
-            <div>
-              <Link to='/'><img src={Logo} alt='logo' /></Link>
-            </div>
+            <Link to='/'><img src={Logo} alt='logo' /></Link>
             <ActionsMenuContainer>
-                <SelectCurrency onChange={this.handleCurrancyChange}>
-                  <option value='USD'>$</option>
-                  <option value='GBP'>£</option>
-                  <option value='JPY'>¥</option>
-                  <option value='RUB'>₽</option>
-                </SelectCurrency>
+                <CurrencySelector changeCurrency={this.props.changeCurrency} /> 
                 <CartIcon onClick={this.cartDisplay}>
                   <img src={Cart} alt='cart'/>
-                  {this.props.items.length > 0? 
-                    <ItemCounter>{this.props.items.length}</ItemCounter>  
-                  :
-                    null
-                  }
+                  {this.cartItemAmount(this.props.items.length)}
                 </CartIcon>
             </ActionsMenuContainer>
-        </HeaderElement> 
-        {this.state.showCart === true && this.props.items.length>0 ?
-          <div>
-            <CartOverlay 
-              items={this.props.items} 
-              selectedCurrency={this.props.selectedCurrency}
-              updateQuantity={this.props.updateQuantity}
-              saveOption={this.props.saveOption}
-              selectedOptions={this.props.selectedOptions}
-            />
-            <ModalOverlay cartDisplay={this.cartDisplay} />
-          </div>
-        :
-          null
-        } 
+        </HeaderElement>
+        {this.showCartOverlay()} 
       </> 
     )
   }
 }
-
 export default Header;

@@ -39,7 +39,6 @@ const Quantity = styled.h2`
 `
 
 class QuantityModifierSmall extends Component {
-
     add = () => {
         this.props.updateQuantity(this.props.item, +1)
     }
@@ -48,7 +47,6 @@ class QuantityModifierSmall extends Component {
             this.props.updateQuantity(this.props.item, -1)
         }
     }
-
     render(){
         return(
             <Container>
@@ -63,5 +61,4 @@ class QuantityModifierSmall extends Component {
         )
     }
 }
-
 export default QuantityModifierSmall
