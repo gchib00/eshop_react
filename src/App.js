@@ -20,8 +20,7 @@ class App extends Component{
         selectedCurrency: 0,
         productPageItem: {},
         cartItems: [],
-        selectedOptions: [],
-        total: 0
+        selectedOptions: []
     }
   }
   handleCategoryChange = (category) => {
@@ -33,7 +32,10 @@ class App extends Component{
   setProductPageItem = (product) => {
     this.setState({productPageItem: product})
   }
-  addToCart = (product) => {
+  addToCart = (product, productOptions) => {
+    // console.log('product:', product)
+    console.log('productOptions:', productOptions)
+
     let cartItems = this.state.cartItems
     //check if product is already in the cart. If yes, just increase quantity instead of adding separate cartItem:
     for (let i=0; i<cartItems.length; i++) {
@@ -42,8 +44,8 @@ class App extends Component{
         return this.setState({cartItems: cartItems})
       }
     }
-    //Since product isn't added to the cart yet, wrap it in a new object and add quantity to it, then pass it to Cart
     product.quantity = 1
+    product.productOptions = productOptions
     this.setState({cartItems: this.state.cartItems.concat(product)}) 
   }
   saveOption = (product, attribute, option) => { 

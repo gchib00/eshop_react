@@ -2,10 +2,7 @@ import React, {Component} from 'react'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom'
-
 import QuantityModifierSmall from './QuantityModifierSmall'
-
-
 
 const CartContainer = styled.div` 
     position: absolute;
@@ -54,7 +51,6 @@ const ItemContainer = styled.div`
     justify-content: space-between;
     width: 98%;
     min-height: 140px;
-    /* border-top: 1px solid #E5E5E5; */
     align-items: center;
 `
 const Title = styled.p`
@@ -177,11 +173,12 @@ class CartOverlay extends Component {
     }
     getTotal = () => {
         let total = 0;
-        let items = this.props.items
+        const items = this.props.items
+        const currencySymbol = this.getCurrencySymbol(this.props.items[0].prices[this.props.selectedCurrency].currency)
         items.map(item => {
-            return total = total + item.prices[this.props.selectedCurrency].amount * item.quantity
+            return total += item.prices[this.props.selectedCurrency].amount * item.quantity
         })
-        return total.toFixed(2)
+        return currencySymbol+total.toFixed(2)
     }
     checkIfEmpty = () => {
         if (this.props.items.length < 1) {
@@ -198,11 +195,6 @@ class CartOverlay extends Component {
     }
     getCurrencySymbol = (currency) => {
         let symbol = currency
-        // //in case currency is index:
-        // if (typeof symbol !== String){
-        //     console.log('currency para:', currency)
-        //     // symbol = this.props.items[0].prices[currency].currency
-        // }
         if (symbol === 'USD') {symbol = '$'}
         if (symbol === 'GBP') {symbol = '£'}
         if (symbol === 'JPY') {symbol = '¥'}
@@ -217,7 +209,7 @@ class CartOverlay extends Component {
             const currency = item.prices[index].currency
             let price = item.prices[index].amount
             return array.push(
-                <ItemContainer key={item.id}>
+                <ItemContainer key={uuidv4()}>
                     <Side1>
                         <Title>{item.name}</Title> 
                         <Price>{this.getCurrencySymbol(currency)}{price}</Price>
@@ -229,15 +221,13 @@ class CartOverlay extends Component {
                                             <ColorContainer key={uuidv4()}>
                                                 <Attribute>{attribute.id}: </Attribute>
                                                 <ColorCube style={{backgroundColor: this.getItemOptions(attribute, item)}} />
-                                            </ColorContainer>
-                                        )
+                                            </ColorContainer>)
                                     } else {
                                         return(
                                             <div key={uuidv4()}>
                                                 <Attribute>{attribute.id}: {this.getItemOptions(attribute, item)}</Attribute>
                                             </div>
-                                        )
-                                    }}
+                                    )}}
                                 )
                             }
                         </div>
@@ -251,28 +241,22 @@ class CartOverlay extends Component {
         })
         return array
     }
-
-
     render(){
-
         this.checkIfEmpty()
         return(
             <CartContainer>
                 {this.mybagText()}
                 {this.showItems()}
-                    <TotalSection>
-                        <Title>Total</Title>
-                        <Price>
-                            {this.getCurrencySymbol(this.props.items[0].prices[this.props.selectedCurrency].currency)} {this.getTotal()}
-                        </Price>
-                    </TotalSection>
-                    <ButtonContainer>
-                        <ViewbagButton to='/cart'>VIEW BAG</ViewbagButton>
-                        <CheckoutButton to='/cart'>CHECK OUT</CheckoutButton>
-                    </ButtonContainer>
+                <TotalSection>
+                    <Title>Total</Title>
+                    <Price>{this.getTotal()}</Price>
+                </TotalSection>
+                <ButtonContainer>
+                    <ViewbagButton to='/cart'>VIEW BAG</ViewbagButton>
+                    <CheckoutButton to='/cart'>CHECK OUT</CheckoutButton>
+                </ButtonContainer>
             </CartContainer>
         )
     }
 }
-
 export default CartOverlay

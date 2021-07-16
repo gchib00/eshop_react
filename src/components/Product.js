@@ -13,9 +13,6 @@ const ProductCard = styled.div`
         box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
         transition: 300ms;
     }
-    &:hover > img { 
-        visibility: visible; 
-    }
 `
 const ProductName = styled.p`
     font-family: 'Raleway';
@@ -38,7 +35,6 @@ const OutOfStockText = styled.p`
     align-items: center;
     justify-content: center;
     bottom: 105px;
-
     text-decoration: none;
     font-family: 'Raleway';
     font-weight: 400;
@@ -59,9 +55,11 @@ const Cart = styled.img`
     visibility: hidden;
     cursor: pointer;
     margin: 0;
-    &:hover {
-        box-shadow: 0px 2px 3px 1px grey;
-        border-radius: 50%;
+`
+const LinkPDP = styled(Link)`
+    text-decoration: none;
+    &:hover > img {
+        visibility: visible;
     }
 `
 
@@ -110,7 +108,7 @@ class Product extends PureComponent{
         const availability = this.props.product.inStock
         return(
             <ProductCard>
-                <Link to='/product' style={{textDecoration: 'none'}}>
+                <LinkPDP to='/product'>
                     <MainImage 
                         src={this.props.product.gallery[0]} 
                         alt='product' 
@@ -118,12 +116,11 @@ class Product extends PureComponent{
                         style={this.outofstockStyle(availability)}
                     />
                     <OutOfStockText>{this.outofstockText(availability)}</OutOfStockText>
-                </Link>
-                <Cart 
-                    src={RoundCart} 
-                    onClick={()=>this.props.addToCart(this.props.product)} 
-                    style={(this.outofstockCart(availability))}
-                />
+                    <Cart 
+                        src={RoundCart} 
+                        style={(this.outofstockCart(availability))}
+                    />
+                </LinkPDP>
                 <ProductName>{this.props.product.name}</ProductName>
                 <Price>{this.getCurrency()}{this.getAmount()}</Price>
             </ProductCard>

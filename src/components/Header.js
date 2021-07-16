@@ -101,8 +101,12 @@ class Header extends Component{
     this.setState({showCart: !this.state.showCart})
   }
   cartItemAmount = (totalItems) => {
-    if(totalItems > 0){
-      return(<ItemCounter>{this.props.items.length}</ItemCounter>)  
+    if(totalItems.length > 0){
+      let itemCounter = 0;
+      totalItems.map(item => {
+        return itemCounter+=item.quantity
+      })
+      return(<ItemCounter>{itemCounter}</ItemCounter>)  
     }
     return null
   }
@@ -171,7 +175,7 @@ class Header extends Component{
                 <CurrencySelector changeCurrency={this.props.changeCurrency} /> 
                 <CartIcon onClick={this.cartDisplay}>
                   <img src={Cart} alt='cart'/>
-                  {this.cartItemAmount(this.props.items.length)}
+                  {this.cartItemAmount(this.props.items)}
                 </CartIcon>
             </ActionsMenuContainer>
         </HeaderElement>

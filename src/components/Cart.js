@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid';
 
-
 import PhotoSlider from './PhotoSlider'
 import QuantityModifier from './QuantityModifier'
 import OptionSelectorBox from './OptionSelectorBox'
@@ -11,13 +10,11 @@ const ItemContainer = styled.div`
     font-family: 'Raleway', sans-serif;
     display: flex;
     justify-content: space-between;
-
     max-width: 1100px;
     min-height: 186px;
     border-top: 1px solid #E5E5E5;
     margin-left: 3rem;
     margin-bottom: 1rem;
-
     align-items: center;
 `
 const CartTitle = styled.h1`
@@ -72,84 +69,86 @@ const TotalAmount = styled.div`
     margin-bottom: 1rem;
 `
 
-
 class Cart extends Component {
-
     getTotal = () => {
         let total = 0;
-        let items = this.props.items
+        const items = this.props.items
+        if (items[0] === undefined) {return null}
+        const currencySymbol = this.getCurrencySymbol(this.props.items[0].prices[this.props.selectedCurrency].currency)
         items.map(item => {
             return total = total + item.prices[this.props.selectedCurrency].amount * item.quantity
         })
-        return total.toFixed(2)
+        return currencySymbol+total.toFixed(2)
     }
-
-    render(){
-        let items = this.props.items
-        let index = this.props.selectedCurrency
-        let currencyIdentifier;
-        
-        if (items.length < 1) {
-            return <CartTitle>Cart is empty</CartTitle>
+    getCartTitle = () => {
+        if (this.props.items.length < 1) {
+            return 'Cart is empty'
         }
-
+        return 'CART'
+    }
+    getCurrencySymbol = (currency) => {
+        let symbol = currency
+        if (symbol === 'USD') {symbol = '$'}
+        if (symbol === 'GBP') {symbol = '£'}
+        if (symbol === 'JPY') {symbol = '¥'}
+        if (symbol === 'RUB') {symbol = '₽'} 
+        return symbol
+    }
+    showItems = () => {
+        const array = []
+        const index = this.props.selectedCurrency
+        this.props.items.map(item => {
+            const currency = item.prices[index].currency
+            const price = item.prices[index].amount
+            return array.push(
+                <ItemContainer key={uuidv4()}>
+                    <Side1>
+                        <Title>{item.name}</Title> 
+                        <Price>{this.getCurrencySymbol(currency)}{price}</Price>
+                        <br />
+                        <div>
+                            {(item.attributes.length === 0) ? <br/> :
+                                item.attributes.map(attribute => {
+                                    return(
+                                        <div key={uuidv4()}>
+                                            <OptionBoxes>
+                                                <OptionSelectorBox         
+                                                    attribute={attribute} 
+                                                    saveOption={this.props.saveOption} 
+                                                    product={item}
+                                                    selectedOptions={this.props.selectedOptions}
+                                                />
+                                            </OptionBoxes>
+                                            <br/>
+                                        </div>)
+                                })
+                            }
+                        </div>
+                    </Side1>
+                    <Side2>
+                        <QuantityModifier item={item} updateQuantity={this.props.updateQuantity}/>
+                        <PhotoSlider item={item} />
+                    </Side2>
+                </ItemContainer>) 
+        })
+        return array
+    }
+    totalText = () => {
+        if (this.props.items[0] === undefined) {return null}
+        return 'TOTAL'
+    }
+    render(){        
         return(
             <>
-                <CartTitle>CART</CartTitle>
+                <CartTitle>{this.getCartTitle()}</CartTitle>
                 <br />
-                
-                {items.map(item => {
-
-                    let currency = item.prices[index].currency
-                    let price = item.prices[index].amount
-                        if (currency === 'USD') {currency = '$'}
-                        if (currency === 'GBP') {currency = '£'}
-                        if (currency === 'JPY') {currency = '¥'}
-                        if (currency === 'RUB') {currency = '₽'}
-                        currencyIdentifier = currency
-
-                    return(
-                        <ItemContainer key={item.id}>
-                            <Side1>
-                                <Title>{item.name}</Title> 
-                                <Price>{currency}{price}</Price>
-                                <br />
-                                <div>
-                                    {item.attributes.length === 0 ? //needs to be checked, otherwise the program will break if product has no attribute
-                                    <br /> //returning br tag or 'null' will fix the problem
-                                    :
-                                        item.attributes.map(attribute => {
-                                            return(
-                                                <div key={uuidv4()}>
-                                                    <OptionBoxes>
-                                                        <OptionSelectorBox         
-                                                            attribute={attribute} 
-                                                            saveOption={this.props.saveOption} 
-                                                            product={item}
-                                                            selectedOptions={this.props.selectedOptions}
-                                                        />
-                                                    </OptionBoxes>
-                                                    <br/>
-                                                </div>
-                                            )
-                                        })
-                                    }
-                                </div>
-                            </Side1>
-                            <Side2>
-                                <QuantityModifier item={item} updateQuantity={this.props.updateQuantity}/>
-                                <PhotoSlider item={item} />
-                            </Side2>
-                        </ItemContainer>
-                    ) 
-                })}
-                        <TotalAmount>
-                            <h2>TOTAL</h2>
-                            <h2>{currencyIdentifier}{this.getTotal()}</h2>
-                        </TotalAmount>
+                {this.showItems()}
+                <TotalAmount>
+                    <h2>{this.totalText()}</h2>
+                    <h2>{this.getTotal()}</h2>
+                </TotalAmount>
             </>
         )
     }
 }
-
 export default Cart

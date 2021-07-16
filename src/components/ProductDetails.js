@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import OptionSelectorBox from './OptionSelectorBox'
 import { v4 as uuidv4 } from 'uuid';
 import sanitizeHtml from 'sanitize-html';
+import {Redirect} from 'react-router-dom'
 
 const MainContainer = styled.div`
     font-family: 'Raleway', sans-serif;
@@ -67,17 +68,29 @@ const Price = styled.p`
 `
 
 class ProductDetails extends PureComponent {
-    
-    addProductToCart = (product, selectedOptions) => {
-        if (!product.inStock){
-            return null
+    addProductToCart = (product) => {
+        if (!product.inStock){return null}
+        //if item has options, user needs to select them before item is added to cart:
+        let counter = 0;
+        const productOptions = []
+        if (product.attributes.length > 0){
+            this.props.selectedOptions.map(selectedOption => {
+                //count how many options have been selected for this item:
+                if (selectedOption.product.name === product.name){
+                    productOptions.push(selectedOption)
+                    return counter++
+                }
+                return null
+            })
+            //number of selected options must be equal to the number of all the available options:
+            if (counter !== product.attributes.length){
+                return alert('All the available product options need to be selected.')
+            }     
         }
-        return this.props.addToCart(this.props.product)
+        return this.props.addToCart(this.props.product, productOptions)
     }
     disableButton = (available) => {
-        if(!available){
-            return({display: 'none'})
-        }
+        if(!available){return({display: 'none'})}
         return null
     }
     purifyHtml = (html) => {
@@ -90,6 +103,7 @@ class ProductDetails extends PureComponent {
     renderAttributes = () => {
         const array = []
         const product = this.props.product
+        if (!product.attributes) {return <Redirect to='/'/>}
         product.attributes.map(attribute => array.push(
                 <div key={uuidv4()}>
                     <AttributeTitle>{attribute.name}:</AttributeTitle>
@@ -108,23 +122,31 @@ class ProductDetails extends PureComponent {
         )
         return array
     }
+    getPrice = (product) => {
+        if (!product.prices) {return <Redirect to='/' />}
+        const currency = product.prices[this.props.selectedCurrency].currency
+        const amount = product.prices[this.props.selectedCurrency].amount
+        let currencySymbol = currency
+        if (currency === 'USD') {currencySymbol = '$'}
+        if (currency === 'GBP') {currencySymbol = '£'}
+        if (currency === 'AUD') {currencySymbol = '$'}
+        if (currency === 'JPY') {currencySymbol = '¥'}
+        if (currency === 'RUB') {currencySymbol = '₽'}
+        return currencySymbol+amount
+    }
+    componentDidCatch(err){
+        console.error(err)
+        return <Redirect to='/' />
+    } 
     render() {
         const product = this.props.product
-        let currency = product.prices[this.props.selectedCurrency].currency
-        let price = product.prices[this.props.selectedCurrency].amount
-        if (currency === 'USD') {currency = '$'}
-        if (currency === 'GBP') {currency = '£'}
-        if (currency === 'AUD') {currency = '$'}
-        if (currency === 'JPY') {currency = '¥'}
-        if (currency === 'RUB') {currency = '₽'}
-
         return(
             <MainContainer>
                 <ProductName>{product.name}</ProductName>
                 {this.renderAttributes()}
                 <div>
                     <AttributeTitle>Price:</AttributeTitle>
-                    <Price>{currency} {price}</Price>
+                    <Price>{this.getPrice(product)}</Price>
                 </div>
                 <AddToCart 
                     onClick={()=>this.addProductToCart(product, this.props.selectedOptions)}
