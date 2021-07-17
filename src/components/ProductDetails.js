@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 import OptionSelectorBox from './OptionSelectorBox'
 import { v4 as uuidv4 } from 'uuid';
@@ -67,28 +67,53 @@ const Price = styled.p`
     color: #1D1F22;
 `
 
-class ProductDetails extends PureComponent {
+class ProductDetails extends Component {
     addProductToCart = (product) => {
         if (!product.inStock){return null}
         //if item has options, user needs to select them before item is added to cart:
-        let counter = 0;
-        const productOptions = []
+        let counter = 0
+        let productOptions = []
         if (product.attributes.length > 0){
-            this.props.selectedOptions.map(selectedOption => {
+            this.props.selectedOptions.map(selectedOption => { 
                 //count how many options have been selected for this item:
-                if (selectedOption.product.name === product.name){
-                    productOptions.push(selectedOption)
-                    return counter++
-                }
-                return null
+                if (selectedOption.productName === product.name){
+                    counter++
+                    return productOptions.push(selectedOption)
+                } else {return null}
             })
-            //number of selected options must be equal to the number of all the available options:
             if (counter !== product.attributes.length){
                 return alert('All the available product options need to be selected.')
-            }     
+            }
         }
-        return this.props.addToCart(this.props.product, productOptions)
+        this.props.addToCart(product, productOptions)
     }
+
+
+
+
+
+
+    // addProductToCart = (product) => {
+    //     if (!product.inStock){return null}
+    //     //if item has options, user needs to select them before item is added to cart:
+    //     let counter = 0;
+    //     const productOptions = []
+    //     if (product.attributes.length > 0){
+    //         this.props.selectedOptions.map(selectedOption => {
+    //             //count how many options have been selected for this item:
+    //             if (selectedOption.product.name === product.name){
+    //                 productOptions.push(selectedOption)
+    //                 return counter++
+    //             }
+    //             return null
+    //         })
+    //         //number of selected options must be equal to the number of all the available options:
+    //         if (counter !== product.attributes.length){
+    //             return alert('All the available product options need to be selected.')
+    //         }     
+    //     }
+    //     return this.props.addToCart(this.props.product, productOptions)
+    // }
     disableButton = (available) => {
         if(!available){return({display: 'none'})}
         return null

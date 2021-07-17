@@ -53,20 +53,14 @@ const Input = styled.input`
 `
 
 class OptionSelectorBox extends PureComponent {
-    constructor(props){
-        super(props)
-        this.state={
-            selectedOptions: this.props.selectedOptions,
-        }
-    }
     onChange = (option) => {
-        this.props.saveOption(this.props.product, this.props.attribute, option) //passes data back to App
+        this.props.saveOption(this.props.product.name, this.props.attribute.name, option) //passes data back to App
     }
     populateOptions = (attribute, item) => {
         const selectedOptions = this.props.selectedOptions
         for (let i=0; i<selectedOptions.length; i++){
-            if (selectedOptions[i].product.name === this.props.product.name 
-             && selectedOptions[i].attribute.name === attribute 
+            if (selectedOptions[i].productName === this.props.product.name 
+             && selectedOptions[i].attributeName === attribute 
              && selectedOptions[i].option === item) {
                 return true
             }

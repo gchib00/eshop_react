@@ -91,6 +91,7 @@ class ProductPage extends PureComponent {
                     addToCart={this.props.addToCart}
                     saveOption={this.props.saveOption}
                     selectedOptions={this.props.selectedOptions}
+                    cartItems={this.props.cartItems}
                 />                    
             </MainContainer>
         )

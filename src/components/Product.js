@@ -118,6 +118,7 @@ class Product extends PureComponent{
                     <OutOfStockText>{this.outofstockText(availability)}</OutOfStockText>
                     <Cart 
                         src={RoundCart} 
+                        onClick={this.showProductPage}
                         style={(this.outofstockCart(availability))}
                     />
                 </LinkPDP>

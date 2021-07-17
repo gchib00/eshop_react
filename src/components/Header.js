@@ -104,7 +104,7 @@ class Header extends Component{
     if(totalItems.length > 0){
       let itemCounter = 0;
       totalItems.map(item => {
-        return itemCounter+=item.quantity
+        return itemCounter+=item.product.quantity
       })
       return(<ItemCounter>{itemCounter}</ItemCounter>)  
     }
@@ -167,7 +167,6 @@ class Header extends Component{
                   />
                 </Link>
                 <CategoryButton htmlFor='clothesRadioBtn'>CLOTHES</CategoryButton>
-                  
               </div>
             </CategoryContainer>
             <Link to='/'><img src={Logo} alt='logo' /></Link>

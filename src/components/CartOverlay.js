@@ -162,21 +162,19 @@ const ColorCube = styled.div`
 `
 
 class CartOverlay extends Component {
-    getItemOptions = (attribute, cartItem) => {
-        const selectedOptions = this.props.selectedOptions
-        for (let i=0; i<selectedOptions.length; i++){
-            if (selectedOptions[i].product.name === cartItem.name 
-             && selectedOptions[i].attribute.name === attribute.name) {
-                return selectedOptions[i].option
+    getItemOptions = (attribute, item) => {
+        for (let i=0; i<item.productOptions.length; i++){
+            if(item.productOptions[i].attributeName === attribute.name){
+                return item.productOptions[i].option
             }
         }
     }
     getTotal = () => {
         let total = 0;
         const items = this.props.items
-        const currencySymbol = this.getCurrencySymbol(this.props.items[0].prices[this.props.selectedCurrency].currency)
+        const currencySymbol = this.getCurrencySymbol(this.props.items[0].product.prices[this.props.selectedCurrency].currency)
         items.map(item => {
-            return total += item.prices[this.props.selectedCurrency].amount * item.quantity
+            return total += item.product.prices[this.props.selectedCurrency].amount * item.product.quantity
         })
         return currencySymbol+total.toFixed(2)
     }
@@ -206,16 +204,16 @@ class CartOverlay extends Component {
         const items = this.props.items
         const index = this.props.selectedCurrency
         items.map(item => {
-            const currency = item.prices[index].currency
-            let price = item.prices[index].amount
+            const currency = item.product.prices[index].currency
+            let price = item.product.prices[index].amount
             return array.push(
                 <ItemContainer key={uuidv4()}>
                     <Side1>
-                        <Title>{item.name}</Title> 
+                        <Title>{item.product.name}</Title> 
                         <Price>{this.getCurrencySymbol(currency)}{price}</Price>
                         <div>
-                            {item.attributes.length === 0 ? null :
-                                item.attributes.map(attribute => 
+                            {item.product.attributes.length === 0 ? null :
+                                item.product.attributes.map(attribute => 
                                     {if (attribute.type === 'swatch') {
                                         return(
                                             <ColorContainer key={uuidv4()}>
@@ -233,8 +231,8 @@ class CartOverlay extends Component {
                         </div>
                     </Side1>
                     <Side2>
-                        <QuantityModifierSmall item={item} updateQuantity={this.props.updateQuantity}/>
-                        <Image src={item.gallery[0]} />
+                        <QuantityModifierSmall item={item.product} updateQuantity={this.props.updateQuantity}/>
+                        <Image src={item.product.gallery[0]} />
                     </Side2>
                 </ItemContainer>
             ) 
