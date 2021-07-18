@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid';
-
 import PhotoSlider from './PhotoSlider'
 import QuantityModifier from './QuantityModifier'
-import OptionSelectorBox from './OptionSelectorBox'
+import CartOptionSelectorBox from './CartOptionSelectorBox'
 
 const ItemContainer = styled.div`
     font-family: 'Raleway', sans-serif;
@@ -74,9 +73,9 @@ class Cart extends Component {
         let total = 0;
         const items = this.props.items
         if (items[0] === undefined) {return null}
-        const currencySymbol = this.getCurrencySymbol(this.props.items[0].prices[this.props.selectedCurrency].currency)
+        const currencySymbol = this.getCurrencySymbol(this.props.items[0].product.prices[this.props.selectedCurrency].currency)
         items.map(item => {
-            return total = total + item.prices[this.props.selectedCurrency].amount * item.quantity
+            return total = total + item.product.prices[this.props.selectedCurrency].amount * item.quantity
         })
         return currencySymbol+total.toFixed(2)
     }
@@ -98,25 +97,27 @@ class Cart extends Component {
         const array = []
         const index = this.props.selectedCurrency
         this.props.items.map(item => {
-            const currency = item.prices[index].currency
-            const price = item.prices[index].amount
+            const currency = item.product.prices[index].currency
+            const price = item.product.prices[index].amount
             return array.push(
                 <ItemContainer key={uuidv4()}>
                     <Side1>
-                        <Title>{item.name}</Title> 
+                        <Title>{item.product.name}</Title> 
                         <Price>{this.getCurrencySymbol(currency)}{price}</Price>
                         <br />
                         <div>
-                            {(item.attributes.length === 0) ? <br/> :
-                                item.attributes.map(attribute => {
+                            {(item.product.attributes.length === 0) ? <br/> :
+                                item.product.attributes.map(attribute => {
                                     return(
                                         <div key={uuidv4()}>
                                             <OptionBoxes>
-                                                <OptionSelectorBox         
+                                                <CartOptionSelectorBox         
                                                     attribute={attribute} 
-                                                    saveOption={this.props.saveOption} 
-                                                    product={item}
-                                                    selectedOptions={this.props.selectedOptions}
+                                                    cartItems={this.props.items}
+                                                    selectedOptions={item.productOptions}
+                                                    id={item.objectID}
+                                                    item={item}
+                                                    updateCartItem={this.props.updateCartItem}
                                                 />
                                             </OptionBoxes>
                                             <br/>

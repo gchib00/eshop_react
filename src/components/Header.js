@@ -90,6 +90,7 @@ class Header extends Component{
   }
   showTech = () => {
     this.props.updateCategory('tech')
+    return true
   }
   showClothes = () => {
     this.props.updateCategory('clothes')
@@ -104,7 +105,7 @@ class Header extends Component{
     if(totalItems.length > 0){
       let itemCounter = 0;
       totalItems.map(item => {
-        return itemCounter+=item.product.quantity
+        return itemCounter+=item.quantity
       })
       return(<ItemCounter>{itemCounter}</ItemCounter>)  
     }
@@ -142,7 +143,7 @@ class Header extends Component{
                     readOnly
                 />
                 </Link>
-                <CategoryButton htmlFor='allRadioBtn'>ALL</CategoryButton>
+                <CategoryButton style={{minWidth: '77px'}} htmlFor='allRadioBtn'>ALL</CategoryButton>
               </div>
               <div>
                 <Link to='/'>

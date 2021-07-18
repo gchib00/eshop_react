@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React,{PureComponent} from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -38,7 +38,7 @@ const Quantity = styled.h2`
     font-size: 1rem;
 `
 
-class QuantityModifierSmall extends Component {
+class QuantityModifierSmall extends PureComponent {
     add = () => {
         this.props.updateQuantity(this.props.item, +1)
     }
@@ -47,7 +47,7 @@ class QuantityModifierSmall extends Component {
             this.props.updateQuantity(this.props.item, -1)
         }
     }
-    render(){
+    render(){ 
         return(
             <Container>
                 <ModifierBox>

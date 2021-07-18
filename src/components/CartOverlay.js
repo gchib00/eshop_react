@@ -174,7 +174,7 @@ class CartOverlay extends Component {
         const items = this.props.items
         const currencySymbol = this.getCurrencySymbol(this.props.items[0].product.prices[this.props.selectedCurrency].currency)
         items.map(item => {
-            return total += item.product.prices[this.props.selectedCurrency].amount * item.product.quantity
+            return total += item.product.prices[this.props.selectedCurrency].amount * item.quantity
         })
         return currencySymbol+total.toFixed(2)
     }
@@ -231,7 +231,7 @@ class CartOverlay extends Component {
                         </div>
                     </Side1>
                     <Side2>
-                        <QuantityModifierSmall item={item.product} updateQuantity={this.props.updateQuantity}/>
+                        <QuantityModifierSmall item={item} updateQuantity={this.props.updateQuantity}/>
                         <Image src={item.product.gallery[0]} />
                     </Side2>
                 </ItemContainer>

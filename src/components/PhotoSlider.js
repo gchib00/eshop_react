@@ -38,13 +38,13 @@ class PhotoSlider extends PureComponent {
         return this.setState({index: this.state.index-1})
     }
     moveRight = () => {
-        if (this.state.index === this.props.item.gallery.length-1) {
+        if (this.state.index === this.props.item.product.gallery.length-1) {
             return null
         }
         return this.setState({index: this.state.index+1})
     }
     render(){
-        let photos = this.props.item.gallery
+        let photos = this.props.item.product.gallery
         return(
             <SliderContainer>
                 <Image src={photos[this.state.index]} />

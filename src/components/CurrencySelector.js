@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
@@ -10,14 +10,14 @@ const SelectCurrency = styled.select`
     background: transparent;
     outline: 0px;
     margin-right: 18px;
+    max-width: 40px;
 `
 const CURRENCY_QUERY = gql`
     query {
         currencies
     }
 `
-class CurrencySelector extends Component {
-
+class CurrencySelector extends PureComponent {
     getCurrencies = () => {
         const currencies = []
         if (!this.props.data.loading){
@@ -43,7 +43,7 @@ class CurrencySelector extends Component {
       }
     render() {
         return (
-            <SelectCurrency onChange={this.handleCurrancyChange}>{this.getCurrencies()}</SelectCurrency>
+            <SelectCurrency onChange={this.handleCurrancyChange }>{this.getCurrencies()}</SelectCurrency>
         )
     }
 }
