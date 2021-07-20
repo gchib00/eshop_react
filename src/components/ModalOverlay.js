@@ -3,14 +3,13 @@ import styled from 'styled-components'
 
 const Modal = styled.div`
   position: fixed; 
-  z-index: 1; 
-  left: 0;
-  top: 80px;
-  width: 100%; 
-  height: 100%; 
   overflow: auto; 
-  background-color: rgb(0,0,0);
+  width: 100%; 
+  height: 100vh; 
+  top: 0;
+  overflow: auto; 
   background-color: rgba(0,0,0,0.3); 
+  z-index: 2;
 `   
 
 class ModalOverlay extends PureComponent {

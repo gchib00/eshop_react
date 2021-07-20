@@ -8,15 +8,15 @@ import CurrencySelector from './CurrencySelector'
 import { Link } from 'react-router-dom'
 
 const HeaderElement = styled.header`
+  position: relative;
   height: 80px;
   width: 100%;
   background-color: #FFFFFF;
- 
+  z-index: 4;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-family: 'Raleway', sans-serif;
-
 `
 const CategoryContainer = styled.div`
   height: 56;
@@ -49,6 +49,14 @@ const CategoryButton = styled.label`
       color: #5ECE7B;
   }
   background: transparent;
+`
+const LogoContainer = styled.div`
+  max-width: 68vw;
+  min-width: 58vw;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 const ActionsMenuContainer = styled.div`
   display: flex;
@@ -101,6 +109,9 @@ class Header extends Component{
   cartDisplay = () => {
     this.setState({showCart: !this.state.showCart})
   }
+  disableCart = () => {
+    this.setState({showCart: false})
+  }
   cartItemAmount = (totalItems) => {
     if(totalItems.length > 0){
       let itemCounter = 0;
@@ -121,6 +132,7 @@ class Header extends Component{
             updateQuantity={this.props.updateQuantity}
             saveOption={this.props.saveOption}
             selectedOptions={this.props.selectedOptions}
+            cartDisplay={this.cartDisplay}
           />
           <ModalOverlay cartDisplay={this.cartDisplay} />
         </div>
@@ -132,7 +144,7 @@ class Header extends Component{
     return(
       <>
         <HeaderElement>
-            <CategoryContainer>
+            <CategoryContainer onClick={this.disableCart}>
               <div>
                 <Link to='/'>
                   <Radio
@@ -170,7 +182,9 @@ class Header extends Component{
                 <CategoryButton htmlFor='clothesRadioBtn'>CLOTHES</CategoryButton>
               </div>
             </CategoryContainer>
-            <Link to='/'><img src={Logo} alt='logo' /></Link>
+            <LogoContainer onClick={this.disableCart}>
+              <Link to='/'><img src={Logo} alt='logo'/></Link>
+            </LogoContainer>
             <ActionsMenuContainer>
                 <CurrencySelector changeCurrency={this.props.changeCurrency} /> 
                 <CartIcon onClick={this.cartDisplay}>

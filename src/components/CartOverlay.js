@@ -6,7 +6,7 @@ import QuantityModifierSmall from './QuantityModifierSmall'
 
 const CartContainer = styled.div` 
     position: absolute;
-    z-index: 10;
+    z-index: 3;
     min-height: 300px;
     min-width: 385px;
     background: white;
@@ -178,11 +178,6 @@ class CartOverlay extends Component {
         })
         return currencySymbol+total.toFixed(2)
     }
-    checkIfEmpty = () => {
-        if (this.props.items.length < 1) {
-            return <h1>Cart is empty</h1>
-        }
-    }
     mybagText = () => {
         const items = this.props.items
         let totalItems = `${items.length} items`
@@ -240,7 +235,6 @@ class CartOverlay extends Component {
         return array
     }
     render(){
-        this.checkIfEmpty()
         return(
             <CartContainer>
                 {this.mybagText()}
@@ -250,8 +244,8 @@ class CartOverlay extends Component {
                     <Price>{this.getTotal()}</Price>
                 </TotalSection>
                 <ButtonContainer>
-                    <ViewbagButton to='/cart'>VIEW BAG</ViewbagButton>
-                    <CheckoutButton to='/cart'>CHECK OUT</CheckoutButton>
+                    <ViewbagButton to='/cart' onClick={this.props.cartDisplay}>VIEW BAG</ViewbagButton>
+                    <CheckoutButton to='/cart' onClick={this.props.cartDisplay}>CHECK OUT</CheckoutButton>
                 </ButtonContainer>
             </CartContainer>
         )

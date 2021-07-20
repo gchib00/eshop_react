@@ -43,13 +43,19 @@ class PhotoSlider extends PureComponent {
         }
         return this.setState({index: this.state.index+1})
     }
+    hideArrow = () => {
+        //in case if product has only 1 image, dont show slider arrows
+        if (this.props.item.product.gallery.length === 1) {
+            return{ display: 'none' }
+        } else {return null}
+    }
     render(){
-        let photos = this.props.item.product.gallery
+        const photos = this.props.item.product.gallery
         return(
             <SliderContainer>
                 <Image src={photos[this.state.index]} />
-                <Left onClick={this.moveLeft} src={ChevronLeft} alt='left'/>
-                <Right onClick={this.moveRight} src={ChevronRight} alt='right'/>
+                <Left onClick={this.moveLeft} src={ChevronLeft} alt='left' style={this.hideArrow()}/>
+                <Right onClick={this.moveRight} src={ChevronRight} alt='right' style={this.hideArrow()}/>
             </SliderContainer>
         )
     }
