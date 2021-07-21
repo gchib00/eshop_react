@@ -62,18 +62,19 @@ const LinkPDP = styled(Link)`
         visibility: visible;
     }
 `
-
 class Product extends PureComponent{
-
+    constructor(props){
+        super(props)
+        this.state={
+            link: '/product'
+        }
+    }
     showProductPage = () => {
-        return this.props.setProductPageItem(this.props.product)
+        this.props.setProductPageItem(this.props.product)
     }
     outofstockStyle = (inStock) => {
         if (!inStock){
-            return({
-                opacity: '0.5',
-                marginBottom: '-8rem',
-            })
+            return({opacity: '0.5', marginBottom: '-8rem'})
         }
         return null
     }
@@ -85,9 +86,7 @@ class Product extends PureComponent{
     }
     outofstockCart = (inStock) => {
         if(!inStock){
-            return{
-                visibility: 'hidden',
-            }
+            return{visibility: 'hidden'}
         }
     }
     getCurrency = () => {
@@ -101,8 +100,21 @@ class Product extends PureComponent{
     }
     getAmount = () => {
         const currencyIndex = this.props.selectedCurrency
-        const amount = this.props.product.prices[currencyIndex].amount
-        return amount
+        return this.props.product.prices[currencyIndex].amount
+    }
+    handleCartClick = (e) => {
+        if (this.props.product.attributes.length === 0) {
+            e.preventDefault()//this will prevent page from changing to /product
+            alert('Item has been added to cart')
+            const object = {
+                product: this.props.product,
+                quantity: 1,
+                productOptions: []
+            }
+            this.props.addToCart(object)
+        } else {
+            this.showProductPage()
+        }
     }
     render() {
         const availability = this.props.product.inStock
@@ -118,7 +130,7 @@ class Product extends PureComponent{
                     <OutOfStockText>{this.outofstockText(availability)}</OutOfStockText>
                     <Cart 
                         src={RoundCart} 
-                        onClick={this.showProductPage}
+                        onClick={(e)=>this.handleCartClick(e)}
                         style={(this.outofstockCart(availability))}
                     />
                 </LinkPDP>

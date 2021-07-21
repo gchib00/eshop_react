@@ -31,6 +31,7 @@ class App extends Component{
   }
   setProductPageItem = (product) => {
     this.setState({productPageItem: product})
+    localStorage.setItem('productPageItem', JSON.stringify(product))
   }
   addToCart = (object) => {
     const cartItems = this.state.cartItems
@@ -50,7 +51,8 @@ class App extends Component{
           }
         }
         if (matchCounter === cartItems[i].productOptions.length) {
-          return this.updateQuantity(cartItems[i], 1)
+          this.updateQuantity(cartItems[i], 1)
+          return this.setState({selectedOptions:[]})
         }
         matchCounter=0
       }
@@ -146,14 +148,14 @@ class App extends Component{
             </Route>
             <Route exact path='/product'>
               <ProductPage productPageItem
-                product={this.state.productPageItem}
                 selectedCurrency={this.state.selectedCurrency}
+                product={JSON.parse(localStorage.getItem('productPageItem'))}
                 addToCart={this.addToCart}
                 saveOption={this.saveOption}
                 selectedOptions={this.state.selectedOptions}
                 cartItems={this.state.cartItems}
               />
-            </Route>product
+            </Route>
             <Route exact path='/cart'>
               <Cart 
                 items={this.state.cartItems} 

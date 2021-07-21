@@ -1,7 +1,6 @@
 import React,{ PureComponent } from 'react'
 import styled from 'styled-components'
 import ProductDetails from './ProductDetails.js'
-import {Redirect} from 'react-router-dom'
 
 const MainContainer = styled.main`
     width: 80%;
@@ -20,18 +19,20 @@ const SideImages = styled.div`
 `
 const SideImage = styled.img`
     height: 100px;
-    width: 110px;
+    width: 100px;
 `
 const MainImageContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 511px;
+    height: 704px;
     width: 610px;
+    margin: 25px;
 `
 const MainImage = styled.img`
-    max-height: 511px;
-    max-width: 610px;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
 `
 
 class ProductPage extends PureComponent {
@@ -41,40 +42,35 @@ class ProductPage extends PureComponent {
             imgIndex: 0,
         }
     }
-    populateImgArray = (product) =>{
-        const array = []
-        if (this.props.product.gallery === undefined){ //if it's still loading
-            return null
-        } else {
-            this.props.product.gallery.map(img => array.push(img))
-            return array
-        }
-    }
     updateImgIndex = (imgURL) => {
         // when side image is clicked, it will update 'imgIndex', which will cause the main image to change accordingly 
         this.setState({
             imgIndex: this.props.product.gallery.findIndex(img => img === imgURL)
         })
     }
+    populateImgArray = () =>{
+            const array = []
+            this.props.product.gallery.map(img => array.push(img))
+            return array
+    }
     renderSideImages = (images) => {
         const array = []
-        if (!images) {return <Redirect to='/' />}
-        images.map(img => array.push(
-            <SideImage 
-                src={img} 
-                alt='side'
-                key={img}
-                onClick={() => this.updateImgIndex(img)}
-            />))
+        if (images) {
+            images.map(img => array.push(
+                <SideImage 
+                    src={img} 
+                    alt='side'
+                    key={img}
+                    onClick={() => this.updateImgIndex(img)}
+                />))
+        } else {return null}
         return array
     }
     getMainImage = () => {
-        if (!this.props.product.gallery){return <Redirect to='/' />}
         return this.props.product.gallery[this.state.imgIndex]
     }
     componentDidCatch(err){
         console.error(err)
-        return <Redirect to='/' />
     }
     render(){
         const product = this.props.product

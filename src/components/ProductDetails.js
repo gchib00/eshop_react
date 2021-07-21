@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import OptionSelectorBox from './OptionSelectorBox'
 import { v4 as uuidv4 } from 'uuid';
 import sanitizeHtml from 'sanitize-html';
-import {Redirect} from 'react-router-dom'
 
 const MainContainer = styled.div`
     font-family: 'Raleway', sans-serif;
@@ -100,10 +99,8 @@ class ProductDetails extends PureComponent {
         })
         return purifiedHtml
     }
-    renderAttributes = () => {
+    renderAttributes = (product) => {
         const array = []
-        const product = this.props.product
-        if (!product.attributes) {return <Redirect to='/'/>}
         product.attributes.map(attribute => array.push(
                 <div key={uuidv4()}>
                     <AttributeTitle>{attribute.name}:</AttributeTitle>
@@ -123,7 +120,6 @@ class ProductDetails extends PureComponent {
         return array
     }
     getPrice = (product) => {
-        if (!product.prices) {return <Redirect to='/' />}
         const currency = product.prices[this.props.selectedCurrency].currency
         const amount = product.prices[this.props.selectedCurrency].amount
         let currencySymbol = currency
@@ -136,14 +132,13 @@ class ProductDetails extends PureComponent {
     }
     componentDidCatch(err){
         console.error(err)
-        return <Redirect to='/' />
     } 
     render() {
         const product = this.props.product
         return(
             <MainContainer>
                 <ProductName>{product.name}</ProductName>
-                {this.renderAttributes()}
+                {this.renderAttributes(product)}
                 <div>
                     <AttributeTitle>Price:</AttributeTitle>
                     <Price>{this.getPrice(product)}</Price>

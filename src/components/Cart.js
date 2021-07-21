@@ -51,11 +51,13 @@ const Side1 = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    margin-top: 1rem;
 `
 const Side2 = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    margin-top: 1rem;
 `
 const TotalAmount = styled.div`
     font-family: 'Raleway', sans-serif;

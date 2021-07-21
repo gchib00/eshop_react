@@ -98,10 +98,10 @@ class Header extends Component{
   }
   showTech = () => {
     this.props.updateCategory('tech')
-    return true
   }
   showClothes = () => {
     this.props.updateCategory('clothes')
+
   }
   showAll = () => {
     this.props.updateCategory('') //if query receives empty title string, it will fetch items of all category
