@@ -8,7 +8,7 @@ import {ApolloProvider} from 'react-apollo'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/'
+  uri: 'http://radiant-inlet-15571.herokuapp.com/'
 })
 
 class App extends Component{

@@ -6,8 +6,10 @@ import { ApolloClient, InMemoryCache} from "@apollo/client"
 
 // eslint-disable-next-line no-unused-vars
 const client = new ApolloClient({
-  uri: 'https://48p1r2roz4.sse.codesandbox.io',
-  cache: new InMemoryCache()
+  uri: 'https://radiant-inlet-15571.herokuapp.com/',
+  cache: new InMemoryCache(),
+  introspection: true,
+  playground: true
 });
 
 ReactDOM.render(

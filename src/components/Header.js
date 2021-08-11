@@ -51,8 +51,7 @@ const CategoryButton = styled.label`
   background: transparent;
 `
 const LogoContainer = styled.div`
-  max-width: 68vw;
-  min-width: 58vw;
+  width: 68vw;
   height: 100%;
   display: flex;
   justify-content: center;
