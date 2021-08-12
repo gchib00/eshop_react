@@ -244,8 +244,8 @@ class CartOverlay extends Component {
                     <Price>{this.getTotal()}</Price>
                 </TotalSection>
                 <ButtonContainer>
-                    <ViewbagButton to='/cart' onClick={this.props.cartDisplay}>VIEW BAG</ViewbagButton>
-                    <CheckoutButton to='/cart' onClick={this.props.cartDisplay}>CHECK OUT</CheckoutButton>
+                    <ViewbagButton to='/eshop_react/cart' onClick={this.props.cartDisplay}>VIEW BAG</ViewbagButton>
+                    <CheckoutButton to='/eshop_react/cart' onClick={this.props.cartDisplay}>CHECK OUT</CheckoutButton>
                 </ButtonContainer>
             </CartContainer>
         )

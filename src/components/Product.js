@@ -120,7 +120,7 @@ class Product extends PureComponent{
         const availability = this.props.product.inStock
         return(
             <ProductCard>
-                <LinkPDP to='/product'>
+                <LinkPDP to='/eshop_react/product'>
                     <MainImage 
                         src={this.props.product.gallery[0]} 
                         alt='product' 

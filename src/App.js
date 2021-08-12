@@ -137,7 +137,7 @@ class App extends Component{
             selectedOptions={this.state.selectedOptions}
           />
           <Switch>
-            <Route exact path='/'>
+            <Route exact path='/eshop_react/'>
               <Products 
                 category={this.state.category} 
                 productsArray={this.state.dataArray} 
@@ -146,7 +146,7 @@ class App extends Component{
                 addToCart={this.addToCart}
               />
             </Route>
-            <Route exact path='/product'>
+            <Route exact path='/eshop_react/product'>
               <ProductPage productPageItem
                 selectedCurrency={this.state.selectedCurrency}
                 product={JSON.parse(localStorage.getItem('productPageItem'))}
@@ -156,7 +156,7 @@ class App extends Component{
                 cartItems={this.state.cartItems}
               />
             </Route>
-            <Route exact path='/cart'>
+            <Route exact path='/eshop_react/cart'>
               <Cart 
                 items={this.state.cartItems} 
                 selectedCurrency={this.state.selectedCurrency}

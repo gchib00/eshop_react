@@ -145,7 +145,7 @@ class Header extends Component{
         <HeaderElement>
             <CategoryContainer onClick={this.disableCart}>
               <div>
-                <Link to='/'>
+                <Link to='/eshop_react/'>
                   <Radio
                     type='radio'
                     checked={this.props.category === ''}
@@ -157,7 +157,7 @@ class Header extends Component{
                 <CategoryButton style={{minWidth: '77px'}} htmlFor='allRadioBtn'>ALL</CategoryButton>
               </div>
               <div>
-                <Link to='/'>
+                <Link to='/eshop_react/'>
                   <Radio
                       type='radio'
                       checked={this.props.category === 'tech'}
@@ -169,7 +169,7 @@ class Header extends Component{
                 <CategoryButton htmlFor='techRadioBtn'>TECH</CategoryButton>
               </div>
               <div>
-                <Link to='/'>
+                <Link to='/eshop_react/'>
                   <Radio
                       type='radio'
                       checked={this.props.category === 'clothes'}
@@ -182,7 +182,7 @@ class Header extends Component{
               </div>
             </CategoryContainer>
             <LogoContainer onClick={this.disableCart}>
-              <Link to='/'><img src={Logo} alt='logo'/></Link>
+              <Link to='/eshop_react/'><img src={Logo} alt='logo'/></Link>
             </LogoContainer>
             <ActionsMenuContainer>
                 <CurrencySelector changeCurrency={this.props.changeCurrency} /> 
