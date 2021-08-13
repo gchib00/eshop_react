@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import Product from './Product'
+import LoadingScreen from './LoadingScreen'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import {graphql} from 'react-apollo'
@@ -54,6 +55,9 @@ class Products extends PureComponent{
     return array
   }
   displayTitle = () => {
+    if (this.filteredList().length < 1){
+      return <LoadingScreen />
+    }
     if (this.props.category === '') {
       return 'Category - All'
     }

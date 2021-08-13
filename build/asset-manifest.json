@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/eshop_react/static/js/main.13e42802.chunk.js",
-    "main.js.map": "/eshop_react/static/js/main.13e42802.chunk.js.map",
+    "main.js": "/eshop_react/static/js/main.4da6fd9f.chunk.js",
+    "main.js.map": "/eshop_react/static/js/main.4da6fd9f.chunk.js.map",
     "runtime-main.js": "/eshop_react/static/js/runtime-main.aefa6053.js",
     "runtime-main.js.map": "/eshop_react/static/js/runtime-main.aefa6053.js.map",
-    "static/js/2.26dd6dca.chunk.js": "/eshop_react/static/js/2.26dd6dca.chunk.js",
-    "static/js/2.26dd6dca.chunk.js.map": "/eshop_react/static/js/2.26dd6dca.chunk.js.map",
+    "static/js/2.1e4d185c.chunk.js": "/eshop_react/static/js/2.1e4d185c.chunk.js",
+    "static/js/2.1e4d185c.chunk.js.map": "/eshop_react/static/js/2.1e4d185c.chunk.js.map",
     "index.html": "/eshop_react/index.html",
-    "static/js/2.26dd6dca.chunk.js.LICENSE.txt": "/eshop_react/static/js/2.26dd6dca.chunk.js.LICENSE.txt",
+    "static/js/2.1e4d185c.chunk.js.LICENSE.txt": "/eshop_react/static/js/2.1e4d185c.chunk.js.LICENSE.txt",
     "static/media/cart.d1995367.svg": "/eshop_react/static/media/cart.d1995367.svg",
     "static/media/left.d5bb5aa4.svg": "/eshop_react/static/media/left.d5bb5aa4.svg",
     "static/media/logo.e2b3f410.svg": "/eshop_react/static/media/logo.e2b3f410.svg",
@@ -16,7 +16,7 @@
   },
   "entrypoints": [
     "static/js/runtime-main.aefa6053.js",
-    "static/js/2.26dd6dca.chunk.js",
-    "static/js/main.13e42802.chunk.js"
+    "static/js/2.1e4d185c.chunk.js",
+    "static/js/main.4da6fd9f.chunk.js"
   ]
 }
